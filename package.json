@@ -1,0 +1,40 @@
+{
+  "name": "moonshooter",
+  "version": "1.0.0",
+  "description": "calc moon direction",
+  "keywords": [
+    "TypeScript",
+    "suncalc"
+  ],
+  "license": "MIT",
+  "author": "市川宏規",
+  "type": "esnext",
+  "main": "index.html",
+  "scripts": {
+    "init": "npm run copy-libs && npm run copy-favicon && npm run copy-license && npm run update",
+    "copy-libs": "npm run copy-leaflet && npm run copy-jquery && npm run copy-suncalc && npm run copy-jquery-ui",
+    "copy-leaflet": "shx cp -r ./node_modules/leaflet/dist/ ./dist/scripts/leaflet",
+    "copy-jquery": "shx cp -r ./node_modules/jquery/dist ./dist/scripts/jquery",
+    "copy-jquery-ui": "shx cp -r ./node_modules/jquery-ui/dist ./dist/scripts/jquery-ui",
+    "copy-suncalc": "shx cp -r ./node_modules/@noim/suncalc3 ./dist/scripts/suncalc3",
+    "copy-favicon": "shx cp ./src/favicon.ico ./dist",
+    "update": "npm run copy-index && npm run copy-css && npm run tsc",
+    "copy-index": "shx cp ./src/index.html ./dist",
+    "copy-css": "shx cp ./src/base.css ./dist",
+    "copy-license": "shx cp ./LICENSE ./dist/LICENSE.txt",
+    "tsc": "tsc"
+  },
+  "devDependencies": {
+    "@noim/suncalc3": "^2.0.5",
+    "@types/jquery": "^4.0.0",
+    "@types/jqueryui": "^1.12.24",
+    "@types/leaflet": "^1.9.21",
+    "http-server": "^14.1.1",
+    "jquery": "^4.0.0",
+    "jquery-ui": "^1.14.2",
+    "leaflet": "^1.9.4",
+    "prettier": "^3.8.3",
+    "shx": "^0.4.0",
+    "typescript": "^6.0.3"
+  }
+}
