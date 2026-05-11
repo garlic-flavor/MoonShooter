@@ -13,16 +13,18 @@
   "scripts": {
     "init": "npm run copy-libs && npm run copy-favicon && npm run copy-license && npm run update",
     "copy-libs": "npm run copy-leaflet && npm run copy-jquery && npm run copy-suncalc && npm run copy-jquery-ui",
-    "copy-leaflet": "shx cp -r ./node_modules/leaflet/dist/ ./dist/scripts/leaflet",
-    "copy-jquery": "shx cp -r ./node_modules/jquery/dist ./dist/scripts/jquery",
-    "copy-jquery-ui": "shx cp -r ./node_modules/jquery-ui/dist ./dist/scripts/jquery-ui",
-    "copy-suncalc": "shx cp -r ./node_modules/@noim/suncalc3 ./dist/scripts/suncalc3",
-    "copy-favicon": "shx cp ./src/favicon.ico ./dist",
+    "copy-leaflet": "node ./scripts/copy.to.build.js leaflet",
+    "copy-jquery": "node ./scripts/copy.to.build.js jquery",
+    "copy-jquery-ui": "node ./scripts/copy.to.build.js jquery-ui",
+    "copy-suncalc": "node ./scripts/copy.to.build.js suncalc",
+    "copy-favicon": "node ./scripts/copy.to.build.js favicon",
     "update": "npm run copy-index && npm run copy-css && npm run tsc",
-    "copy-index": "shx cp ./src/index.html ./dist",
-    "copy-css": "shx cp ./src/base.css ./dist",
-    "copy-license": "shx cp ./LICENSE ./dist/LICENSE.txt",
-    "tsc": "tsc"
+    "copy-index": "node ./scripts/copy.to.build.js index",
+    "copy-css": "node ./scripts/copy.to.build.js css",
+    "copy-license": "node ./scripts/copy.to.build.js license",
+    "unpkg-url": "node ./scripts/replace.to.publish.js",
+    "tsc": "tsc",
+    "build": "npm run copy-index && npm run copy-css && npm run copy-license && npm run unpkg-url && npm run tsc"
   },
   "devDependencies": {
     "@noim/suncalc3": "^2.0.5",
@@ -34,7 +36,6 @@
     "jquery-ui": "^1.14.2",
     "leaflet": "^1.9.4",
     "prettier": "^3.8.3",
-    "shx": "^0.4.0",
     "typescript": "^6.0.3"
   }
 }

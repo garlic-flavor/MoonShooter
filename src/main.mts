@@ -3,14 +3,9 @@ import * as SunCalc from "@noim/suncalc3"
 
 import * as A from "./altitude.mjs"
 import * as D from "./dom.mjs"
-import * as FM from "./moonlatlng.from.map.mjs"
 import * as M from "./map.mjs"
 
 $(document).ready(function() {
-  $("#javascript_notice_container").hide();
-
-
-
 //============================================================================
 // ボタン click処理
 //
@@ -52,14 +47,28 @@ $("#the_day")
   .val(new Date().toLocaleDateString());
 D.updateMoonInfo();
 
+// 履歴の設定。
+D.updateHistory();
+
 // 月の出、月の入り
 $("input[name='moon_rise_or_set']").on('change', D.moonRiseOrSetOnChange);
 
 //--------------------------------------------------------------------
 // 読み込みボタンの処理
 $("#import_data").on('click', ()=>{
-  // JSON の読み取り
-  const data = JSON.parse ($("#to_import_data").val() as string);
+  const data = (()=>{
+    const to_import = ($("#to_import_data").val() as string).trim();
+    // インポート
+    if (to_import) {
+      return JSON.parse (to_import);
+    // 履歴から
+    } else {
+      const h_name = $("#history").val();
+      if (!h_name) { return undefined; }
+      const history : any[] = JSON.parse (window.localStorage.getItem("history") ?? '[]');
+      return history.find((item)=>item.session_name == h_name);
+    }
+  })()
   if (!data) { return; }
   // フォームへの書き戻し
   for (const key in data) {
@@ -165,9 +174,16 @@ $("#calc_by_the_day").on ('click', async ()=> {
 
   // export
   ll.alt! -= formData.moon_pseudo_height;
+  if (!formData.session_name.trim()) {
+    formData.session_name = (new Date().toLocaleString());
+  }
   formData.ll = ll;
+  formData.to_import_data = undefined;
   formData.line = line;
   D.exportResult (formData);
+
+  // 履歴へ記録する
+  D.updateHistory (formData);
 });
 
 });

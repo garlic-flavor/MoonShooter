@@ -136,3 +136,25 @@ export function updateLatLngDisplay (ll: {lat: number, lng: number}): void {
   });
 
 }
+
+//--------------------------------------------------------------------
+export function updateHistory (data?: any) {
+  const history : any[] = JSON.parse(window.localStorage.getItem("history") ?? '[]');
+  if (data) {
+    history.unshift (data);
+    // 多すぎる履歴は削除する。
+    if (10 < history.length) {
+      history.pop();
+    }
+    window.localStorage.setItem ("history", JSON.stringify(history));
+  }
+  $("#history").children().remove();
+  history.map((item)=>{
+    if (!item.session_name) { return; }
+    $("<option>")
+      .text (item.session_name)
+      .val (item.session_name)
+      .appendTo ("#history");
+  });
+}
+
