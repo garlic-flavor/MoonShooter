@@ -1,4 +1,72 @@
-# Moon Shooter
-©️ 2026 市川宏規
+# 月ドン君1号 ver0.002β
+&copy; 2026 市川宏規
+
+## Description
+国土地理院地図上に月ドンラインを引きます。　
+
+## Live Demo
+- [Live Demo](./dist/index.html)
+
+## Acknowledgement
+このソフトウェアは以下のツールを利用しています。
+- __開発環境構築__  
+  [Node.JS](https://nodejs.org/ja)
+- __トランスパイラ__  
+  [TypeScript](https://www.typescriptlang.org)
+- __DOMハンドリング__  
+  [jQuery](https://jquery.com)
+- __UI__  
+  [jQuery-UI](https://jqueryui.com)
+- __地図/標高データ__  
+  [国土地理院地図](https://www.gsi.go.jp)
+- __地図表示__  
+  [leaflet](https://leafletjs.com)
+- __月情報計算__  
+  [SunCalc3](https://www.npmjs.com/package/@noim/suncalc3?activeTab=code)
+- __ライブラリホスト__  
+  [unpkg](https://unpkg.com)
+- __Markdown Rendering__  
+  [cmark-gfm](https://www.npmjs.com/package/cmark-gfm?activeTab=code)
+
+## Github Repository
+- [garlic-flavor's Github](https://github.com/garlic-flavor/MoonShooter)
+- [Github Pgae](https://garlic-flavor.github.io/MoonShooter)
+
+## License
+[MIT License](./dist/LICENSE.txt)
+
+## 使い方
+1. __月の見かけの位置を設定する。__  
+  月の見かけの位置とは、「もし、現地に建物も木も何もなく、月が"書き割り"で描かれていた場合、その"書き割り"の設置位置」のこと。
+  __地図で指定__ ボタンを押して地図上にピンをドロップするか、緯度,経度ボックスに直接入力して設定する。
+2. __月の見かけの高さを設定する。__  
+  月の見かけの高さとは、「"書き割り"の下端からそれに描かれた月の中心までの長さ」のこと。
+  丁度建物の高さを指定すると、建物の最上部に月の中心が来るようになる。
+3. __観測者の高さを設定する。__  
+  地面から測った視線の高さ、あるいは設置するカメラの高さを指定する。
+  橋など、建造物の上から撮影する場合、その分の高さを含める必要がある。
+4. __調べる距離を設定する。__
+  計算はこの範囲で行われる。
+  あまり広い範囲を指定すると計算に時間がかかる。
+5. __観測日、調べる時間を設定する。__  
+  計算はこの範囲で行われる。
+  あまり広い範囲を指定しても、意味がないと思われる。
+6. __実行ボタンでその日の月ドンラインを地図上に表示する。__
+
+## 問題点
+- __建物や樹を考慮しない。__  
+  観測点から実際に対象物が見えるかどうかを考慮していません。
+  現地では手前のビルに隠れて対象が見えないかもしれません。
+
+- __観測者が居る建物を考慮しない。__  
+  例えば橋の上から撮影する場合、地表から橋の上までの高さを「観測者の高さ」に加えて入力する必要があります。
+  ただし、時間に応じて月ドンポイントが地図上を移動し、現地での高さは変化していくことに対して、「観測者の高さ」は一つしか設定できません。
+
+- __対象物の背後を調べない。__  
+  実際には遠くの山に隠れて月はまだ見えない状況かもしれませんが、これを考慮しません。
+
+- __その他の誤差の要因__  
+    + 地球を真球と仮定しています。
+    + 座標計算に高緯度、特に極付近の処理をしていません。
 
 now, under construction....

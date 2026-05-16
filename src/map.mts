@@ -1,11 +1,13 @@
-import * as L from 'leaflet'
-import * as A from './altitude.mjs'
-import * as D from './dom.mjs'
+import { $ } from 'jquery';
+import * as L from 'leaflet';
+import * as A from './altitude.mjs';
+import * as D from './dom.mjs';
 
 //--------------------------------------------------------------------
 // 地図の初期化
 // 標準地図URLテンプレート
 const MapURL = 'https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png';
+//const MapURL = 'https://cyberjapandata.gsi.go.jp/xyz/ort/{z}/{x}/{y}.png';
 // 初期中心位置
 const DefaultCenter = L.latLng (36.104611, 140.084556);
 // 地図の初期化
@@ -15,50 +17,68 @@ L.tileLayer(MapURL, {
   maxZoom: 18,
 }).addTo(map);
 
-//----------------------------------------------------------------------------
+//--------------------------------------------------------------------
 interface LL { lat: number, lng:number};
 export interface LLDate extends LL {
   date: Date
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 月の見かけの位置を選ぶ画面
-const marker = L.marker (DefaultCenter, {draggable: true, autoPan: true})
-  .on ('dragend', updateDisplay);
+//////////////////////////////////////////////////////////////////////
+// 見かけの位置を選ぶ画面
+const marker = L.marker (DefaultCenter, {draggable: true, autoPan: true});
+//----------------------------------------------------------
+function setMarker (ll: L.LatLng) {
+  marker.remove().setLatLng(ll).addTo(map)
+    .fire ('dragend');
+}
 
 //====================================================================
-export function startToSelectMoonLatLng(ll?: L.LatLng) {
+// 太陽に関して。
+export function startToSetSunPseudoLatLng(ll?: L.LatLng) {
   map.invalidateSize(true);
+  marker.remove().off ('dragend').on ('dragend', updateSunDisplay);
   if (ll) { setMarker(ll); }
   map.off('click').on('click', (e)=>{ setMarker (e.latlng); });
 }
-
 //----------------------------------------------------------
-function setMarker (ll: L.LatLng) {
-  marker.remove().setLatLng(ll).addTo(map);
-  updateDisplay();
-}
-
-//----------------------------------------------------------
-function updateDisplay() {
+function updateSunDisplay() {
   const ll = marker.getLatLng();
-  $("#moon_latlng_display").text(`${ll.lat},${ll.lng}`);
+  $("#sun_pseudo_latlng_display").text(`${ll.lat},${ll.lng}`);
 }
-
-//====================================================================
-export function getAndEndSelectMoonLatLng(): L.LatLng {
+//----------------------------------------------------------
+export function getAndEndSelectSunPseudoLatLng(): L.LatLng {
   map.off('click');
   const ll = marker.getLatLng();
+  marker.off ('dragend');
   marker.remove();
   return ll;
 }
 
 //====================================================================
-export function startToProgress(ll: L.LatLng) {
-  map.invalidateSize (true);
-  map.setView (ll, map.getZoom());
+// 月に関して
+export function startToSetMoonPseudoLatLng(ll?: L.LatLng) {
+  map.invalidateSize(true);
+  marker.remove().off ('dragend').on ('dragend', updateMoonDisplay);
+  if (ll) { setMarker(ll); }
+  map.off('click').on('click', (e)=>{ setMarker (e.latlng); });
+}
+//----------------------------------------------------------
+function updateMoonDisplay() {
+  const ll = marker.getLatLng();
+  $("#moon_pseudo_latlng_display").text(`${ll.lat},${ll.lng}`);
 }
 
+//----------------------------------------------------------
+export function getAndEndSelectMoonPseudoLatLng(): L.LatLng {
+  map.off('click');
+  const ll = marker.getLatLng();
+  marker.off ('dragend');
+  marker.remove();
+  return ll;
+}
+
+//////////////////////////////////////////////////////////////////////
+// 標高検索
 //====================================================================
 export async function getHeight(ll: L.LatLng) : Promise<number | undefined> {
   return A.getHeight (map, ll);
@@ -68,7 +88,7 @@ export async function getHeight(ll: L.LatLng) : Promise<number | undefined> {
 export function getShadow(
     zoom: number,
     target: L.LatLng,
-    light: {altitude: number, azimuth: number, distance: number},
+    light: {altitude: number, azimuth: number},
     camera_height: number,
     far_distance: number,
     progress: (p:number)=>void) : Promise<L.LatLng | undefined> {
@@ -76,20 +96,22 @@ export function getShadow(
     far_distance, progress);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+// 結果表示
 //
-
 //--------------------------------------------------------------------
 // 地図にドンラインを書く。
 let polyline = L.polyline([], {color: 'red'});
 let targetMarker = L.marker (DefaultCenter, {
-  title: "月の見かけの位置",
+  title: '対象の位置',
   riseOnHover: true
 });
 let markers : L.Marker[] = [];
+const thinOpacity = 0.5;
 export function startResult (target: LL, line: LLDate[]) {
   map.invalidateSize (true);
-  targetMarker.setLatLng (target).addTo(map);
+  targetMarker
+    .setLatLng (target).addTo(map);
   polyline.setLatLngs(line).addTo(map);
   line.map((p)=>{
     const date = new Date(p.date).toLocaleString('ja-JP');
@@ -97,17 +119,11 @@ export function startResult (target: LL, line: LLDate[]) {
     const marker = L.marker (p, {
       title: date,
       riseOnHover: true,
-      opacity: 0.2
+      opacity: thinOpacity
     }).addTo(map);
     markers.push(marker);
-//      .off('click').on ('click', (e)=> {
-//        shadowMarker.remove()
-//          .setLatLng(p)
-//          .addTo(map);
-//        $("#result_selected_time").text (new Date(p.date).toLocaleString());
-//      })
     marker.on ('click', (e)=>{
-      markers.map ((item)=>{item.setOpacity(0.2);});
+      markers.map ((item)=>{item.setOpacity(thinOpacity);});
       e.target.setOpacity(1.0);
       $("#timing_list").val(e.target.options.title);
       map.setView (p);

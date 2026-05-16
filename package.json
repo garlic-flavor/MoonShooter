@@ -11,29 +11,17 @@
   "type": "esnext",
   "main": "index.html",
   "scripts": {
-    "init": "npm run copy-libs && npm run copy-favicon && npm run copy-license && npm run update",
-    "copy-libs": "npm run copy-leaflet && npm run copy-jquery && npm run copy-suncalc && npm run copy-jquery-ui",
-    "copy-leaflet": "node ./scripts/copy.to.build.js leaflet",
-    "copy-jquery": "node ./scripts/copy.to.build.js jquery",
-    "copy-jquery-ui": "node ./scripts/copy.to.build.js jquery-ui",
-    "copy-suncalc": "node ./scripts/copy.to.build.js suncalc",
-    "copy-favicon": "node ./scripts/copy.to.build.js favicon",
-    "update": "npm run copy-index && npm run copy-css && npm run tsc",
-    "copy-index": "node ./scripts/copy.to.build.js index",
-    "copy-css": "node ./scripts/copy.to.build.js css",
-    "copy-license": "node ./scripts/copy.to.build.js license",
-    "unpkg-url": "node ./scripts/replace.to.publish.js",
-    "tsc": "tsc",
-    "build": "npm run copy-index && npm run copy-css && npm run copy-license && npm run unpkg-url && npm run tsc"
+    "build": "node ./build.js all",
+    "release": "node ./build.js release"
   },
   "devDependencies": {
     "@noim/suncalc3": "^2.0.5",
     "@types/jquery": "^4.0.0",
-    "@types/jqueryui": "^1.12.24",
     "@types/leaflet": "^1.9.21",
+    "cmark-gfm": "^0.9.0",
+    "get-tsconfig": "^4.14.0",
     "http-server": "^14.1.1",
     "jquery": "^4.0.0",
-    "jquery-ui": "^1.14.2",
     "leaflet": "^1.9.4",
     "prettier": "^3.8.3",
     "typescript": "^6.0.3"

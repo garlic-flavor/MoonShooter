@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <meta charset="utf_8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Moon Shooter</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
-    <link rel="stylesheet" href="https://unpkg.com/jquery-ui/dist/themes/base/jquery-ui.min.css">
+    <link rel="stylesheet" href="./scripts/leaflet/leaflet.css">
     <link rel="stylesheet" href="./base.css">
     <script type="importmap">
       { "imports": {
+        "jquery": "https://unpkg.com/jquery/dist-module/jquery.module.min.js",
         "leaflet": "https://unpkg.com/leaflet/dist/leaflet-src.esm.js",
         "@noim/suncalc3": "https://unpkg.com/@noim/suncalc3/suncalc.js"
       } }
     </script>
-    <script type="text/javascript" src="https://unpkg.com/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/jquery-ui/dist/jquery-ui.min.js"></script>
     <script type="module" src="./scripts/main.mjs"></script>
   </head>
   <body>
@@ -24,130 +23,154 @@
     <script type="text/javascript">
       document.getElementById("javascript_notice_container").style.display = 'none';
     </script>
-    <div id="root">
-      <!--------------------------------------------------------------------
-      -- 使い方
-      -->
-      <div id="usage_container">
-        <h1>月ドン君1号 <small>ver. 0.001β</small></h1>
-        <div id="license">
-          ©️ 2026 市川宏規. Some rights reserved under <a href="./LICENSE.txt">MIT license</a>.
-        </div>
-        <div id="acknowledgement">
-          <h2>謝辞</h2>
-          このソフトウェアは以下のツールを利用しています。
-          <dl>
-            <dt>開発環境構築</dt>
-            <dd><a href="https://nodejs.org/ja">Node.Js</a></dd>
-  
-            <dt>トランスパイラ</dt>
-            <dd><a href="https://www.typescriptlang.org">TypeScript</a></dd>
-  
-            <dt>DOMハンドリング</dt>
-            <dd><a href="https://jquery.com">jQuery</a></dd>
-  
-            <dt>UI</dt>
-            <dd><a href="https://jqueryui.com">jQuery_UI</a></dd>
-  
-            <dt>地図/標高データ</dt>
-            <dd><a href="https://www.gsi.go.jp">国土地理院地図</a></dd>
-  
-            <dt>地図表示</dt>
-            <dd><a href="https://leafletjs.com">leaflet</a></dd>
-  
-            <dt>月情報計算</dt>
-            <dd><a href="https://github.com/Hypnos3/suncalc3">SunCalc3</a></dd>
-  
-            <dt>ライブラリホスト</dt>
-            <dd><a href="https://unpkg.com">unpkg</a></dd>
-            
-          </dl>
-        </div>
-        <div id="usage">
-          <h2>使い方</h2>
-          <ol>
-            <li>
-              月の見かけの位置を設定する。<br>
-              月の見かけの位置とは、「もし、現地に建物も木も何もなく、月が"書き割り"で描かれていた場合、その"書き割り"の設置位置」のこと。<br>
-              <button>地図で指定</button>ボタンを押して地図上にピンをドロップするか、緯度,経度ボックスに直接入力して設定する。
-            </li>
-            <li>
-              月の見かけの高さを設定する。<br>
-              月の見かけの高さとは、「"書き割り"の下端からそれに描かれた月の中心までの長さ」のこと。<br>
-              丁度建物の高さを指定すると、建物の最上部に月の中心が来るようになる。<br>
-            </li>
-            <li>
-              観測者の高さを設定する。<br>
-              地面から測った視線の高さ、あるいは設置するカメラの高さを指定する。<br>
-              橋など、建造物の上から撮影する場合、その分の高さを含める必要がある。
-            </li>
-            <li>
-              調べる距離を設定する。<br>
-              計算はこの範囲で行われる。<br>
-              あまり広い範囲を指定すると計算に時間がかかる。<br>
-            </li>
-            <li>
-              観測日、調べる時間を設定する。<br>
-              計算はこの範囲で行われる。<br>
-              あまり広い範囲を指定しても、意味がないと思われる。<br>
-            </li>
-            <li>
-              <button>調べる</button>でその日の月ドンラインを地図上に表示する。
-            </li>
-          </ol>
-          <h2>問題点</h2>
-          <dl>
-            <dt>建物や樹を考慮しない。</dt>
-            <dd>
-              観測点から実際に対象物が見えるかどうかを考慮していません。
-              現地では手前のビルに隠れて対象が見えないかもしれません。
-            </dd>
-  
-            <dt>観測者が居る建物を考慮しない。</dt>
-            <dd>
-              橋の上から撮影する場合、地表から橋の上までの高さを「観測者の高さ」として入力する必要があります。
-              ただし、時間に応じて月ドンポイントが移動していくことに対して、「観測者の高さ」は一度に表示するラインに対して一つしか設定できません。
-            </dd>
-  
-            <dt>対象物の背後を調べない。</dt>
-            <dd>
-              実際には遠くの山に隠れて月はまだ見えない状況かもしれませんが、これを考慮しません。
-            </dd>
-  
-            <dt>その他の誤差の要因</dt>
-            <dd>
-              <ul>
-                <li>地球を真球と仮定しています。</li>
-                <li>座標計算に高緯度、特に極付近の処理をしていません。</li>
-              </ul>
-            </dd>
-          </dl>
-        </div>
-        <div id="usage_next_container">
-          <button id="usage_next">開始する</button>
-        </div>
-      </div>
+    <div id="root" style="display:none">
       <!--------------------------------------------------------------------
       -- フォーム
       -->
       <div id="main_form">
-        <div id="show_usage_container">
-          <button id="show_usage">❓使い方</button>
+        <a href="../index.html">❓使い方</a>
+        <div id="session_name_container">
+          <label for="session_name">参照名</label>
+          <input type="text" id="session_name"><br>
         </div>
-        <label for="session_name">参照名</label>
-        <input type="text" id="session_name"><br>
-  
+        <!----------------------------------------------------------
+        -- 読み込み
+        -->
         <fieldset>
-          <legend>月の見かけの位置</legend>
-          <label for="moon_latlng">緯度,経度</label>
-          <input id="moon_latlng" type="text" value='34.83680790610885,134.69328403472903'>
-          <button id="moon_latlng_from_map">地図で指定</button><br>
-    <!-- //const DefaultCenter = L.latLng (36.104611, 140.084556); -->
-          <label for='moon_pseudo_height'>月の見かけの高さ</label>
-          <input type="number" id="moon_pseudo_height" value="30">
-          <label for='moon_pseudo_height'>m</label><br>
-        </fieldset>
-        
+          <legend>読み込み</legend>
+          <label for="history">履歴から</label>
+          <select id="history"> </select>
+          <label for="data_to_import"> / JSONから</label>
+          <input type="text" id="data_to_import" value=''>
+          <button id="import_data">読み込む</button>
+        </fieldset><!-- legend="読み込み" -->
+
+        <!----------------------------------------------------------
+        -- 観察天体
+        -->
+        <fieldset>
+          <legend>観測対象</legend>
+          <input type='radio' id="sun_rise" value="sun_rise"
+            name="target_type">
+          <label for="sun_rise">日の出</label>
+
+          <input type="radio" id="sun_set" value="sun_set"
+            name="target_type">
+          <label for="sun_set">日の入り</label>
+
+          <input type='radio' id="moon_rise" value='moon_rise'
+            name='target_type' checked>
+          <label for='moon_rise'>月の出</label>
+
+          <input type='radio' id="moon_set" value="moon_set"
+            name='target_type'>
+          <label for="moon_set">月の入り</label>
+        </fieldset><!-- legend="観測対象" -->
+
+        <!----------------------------------------------------------
+        -- 太陽に関して
+        -->
+        <div id="about_sun" style="display:none">
+          <!------------------------------------------------
+          -- 太陽の見かけの位置
+          -->
+          <fieldset id="about_sum_pseudo_latlng">
+            <legend>太陽の見かけの位置</legend>
+            <label for="sun_pseudo_latlng">緯度,経度</label>
+            <input id="sun_pseudo_latlng" type="text" value='34.83680790610885,134.69328403472903'>
+            <button id="set_sun_pseudo_latlng_from_map">地図で指定</button>
+      <!-- //const DefaultCenter = L.latLng (36.104611, 140.084556); -->
+            <br>
+            <label for='sun_pseudo_height'>太陽の見かけの高さ</label>
+            <input type="number" id="sun_pseudo_height" value="30">
+            <label for='sun_pseudo_height'>m</label><br>
+          </fieldset><!-- legend="太陽の見かけの位置" -->
+
+          <!------------------------------------------------
+          -- 太陽の観察日
+          -->
+          <fieldset id="about_sun_observation_day">
+            <legend>観測日</legend>
+            <input type="date" id="sun_observation_day"><br>
+            <dl id="sun_info">
+              <dt>日の出</dt><dd id="sun_info_rise"></dd>
+              <dt>日の入り</dt><dd id="sun_info_set"></dd>
+            </dl>
+            <div id="minutes_about_sun_rise">
+              <label for="minutes_before_sun_rise">日の出の</label>
+              <input type="number" id="minutes_before_sun_rise" value="10">
+              <label for="minutes_before_sun_rise">分前</label> 〜
+  
+              <label for="minutes_after_sun_rise">日の出の</label>
+              <input type="number" id="minutes_after_sun_rise" value="60">
+              <label for="minutes_after_sun_rise">分後まで</label>
+            </div>
+            <div id="minutes_about_sun_set">
+              <label for="minutes_before_sun_set">日の入りの</label>
+              <input type="number" id="minutes_before_sun_set" value="60">
+              <label for="minutes_before_sun_set">分前</label> 〜
+              <label for="minutes_after_sun_set">日の入りの</label>
+              <input type="number" id="minutes_after_sun_set" value="10">
+              <label for="minutes_after_sun_set">分後まで</label>
+            </div>
+          </fieldset> <!-- legend="太陽の観測日" -->
+        </div><!-- aboud_sun -->
+
+        <!----------------------------------------------------------
+        -- 月に関して
+        -->
+        <div id="about_moon">
+          <!------------------------------------------------
+          -- 月の見かけの位置
+          -->
+          <fieldset id="about_moon_pseudo_latlng">
+            <legend>月の見かけの位置</legend>
+            <label for="moon_pseudo_latlng">緯度,経度</label>
+            <input id="moon_pseudo_latlng" type="text" value='34.83680790610885,134.69328403472903'>
+            <button id="set_moon_pseudo_latlng_from_map">地図で指定</button>
+            <br>
+            <label for='moon_pseudo_height'>月の見かけの高さ</label>
+            <input type="number" id="moon_pseudo_height" value="30">
+            <label for='moon_pseudo_height'>m</label><br>
+          </fieldset><!-- legend="月の見かけの位置" -->
+
+          <!------------------------------------------------
+          -- 月の観察日
+          -->
+          <fieldset id="about_moon_observation_day">
+            <legend>観測日</legend>
+            <button id="get_prev_fullmoon">前の満月</button>
+            <input type="date" id="moon_observation_day">
+            <button id="get_next_fullmoon">次の満月</button>
+            <dl id="moon_info">
+              <dt>満ち欠け</dt><dd id="moon_info_fraction"></dd>
+              <dt>月の出</dt><dd id="moon_info_rise"></dd>
+              <dt>月の入り</dt><dd id="moon_info_set"></dd>
+            </dl>
+            <div id="minutes_about_moon_rise">
+              <label for="minutes_before_moon_rise">月の出の</label>
+              <input type="number" id="minutes_before_moon_rise" value="10">
+              <label for="minutes_before_moon_rise">分前</label> 〜
+  
+              <label for="minutes_after_moon_rise">月の出の</label>
+              <input type="number" id="minutes_after_moon_rise" value="60">
+              <label for="minutes_after_moon_rise">分後まで</label>
+            </div>
+            <div id="minutes_about_moon_set" style="display:none">
+              <label for="minutes_before_moon_set">月の入りの</label>
+              <input type="number" id="minutes_before_moon_set" value="60">
+              <label for="minutes_before_moon_set">分前</label> 〜
+  
+              <label for="minutes_after_moon_set">月の入りの</label>
+              <input type="number" id="minutes_after_moon_set" value="10">
+              <label for="minutes_after_moon_set">分後まで</label>
+            </div>
+          </fieldset><!-- legend="月の観測日" -->
+        </div><!-- about_moon -->
+
+        <!------------------------------------------------
+        -- 観測者
+        -->
         <fieldset>
           <legend>観測者</legend>
           <label for='camera_height'>観測者の高さ</label>
@@ -157,75 +180,46 @@
           <label for='far_distance'>調べる距離 〜 </label>
           <input type="number" id="far_distance" value="10">
           <label for='far_distance'>km</label><br>
-        </fieldset>
-  
-        <fieldset>
-          <legend>観測日</legend>
-          <input type="text" id="the_day"><br>
-          <div>
-            <dl id="moon_info">
-              <dt>満ち欠け</dt><dd id="moon_info_fraction"></dd>
-              <dt>月の出</dt><dd id="moon_info_rise"></dd>
-              <dt>月の入り</dt><dd id="moon_info_set"></dd>
-            </dl>
-          </div>
-  
-          <input type='radio' id="moon_rise" value='moon_rise' name='moon_rise_or_set' checked>
-          <label for='moon_rise'>月の出</label>
-          <input type='radio' id="moon_set" value="moon_set" name='moon_rise_or_set'>
-          <label for="moon_set">月の入り</label>
-  
-          <div id="minutes_about_rise">
-            <label for="minutes_before_rise">月の出の</label>
-            <input type="number" id="minutes_before_rise" value="10">
-            <label for="minutes_before_rise">分前</label> 〜
-            <label for="minutes_after_rise">月の出の</label>
-            <input type="number" id="minutes_after_rise" value="60">
-            <label for="minutes_after_rise">分後まで</label>
-          </div>
-          <div id="minutes_about_set" style="display:none">
-            <label for="minutes_before_set">月の入りの</label>
-            <input type="number" id="minutes_before_set" value="60">
-            <label for="minutes_before_set">分前</label> 〜
-            <label for="minutes_after_set">月の入りの</label>
-            <input type="number" id="minutes_after_set" value="10">
-            <label for="minutes_after_set">分後まで</label>
-          </div>
-  
-        </fieldset>
+        </fieldset><!-- legend="観測者" -->
+        <!--==============================================
+        == 実行
+        -->
         <div id="submit_button_container">
-          <button id="calc_by_the_day">実行</button>
+          <button id="exec_for_sun_rise" style="display:none">実行</button>
+          <button id="exec_for_sun_set" style="display:none">実行</button>
+          <button id="exec_for_moon_rise">実行</button>
+          <button id="exec_for_moon_set" style="display:none">実行</button>
         </div>
-        <fieldset>
-          <legend>読み込み</legend>
-          <label for="history">履歴から</label>
-          <select id="history">
-          </select><br>
-          <label for="to_import_data">JSONから</label>
-          <input type="text" id="to_import_data" value=''>
-          <button id="import_data">読み込む</button>
-        </fieldset>
+      </div><!-- id="main_form" -->
+      <!----------------------------------------------------------
+      -- 処理中画面
+      -->
+      <div id="progress_ui" style="display:none">
+        <div id="progressbar">
+          <div id="progress_label">開始中</div>
+          <div id="progress_gauge"></div>
+        </div>
       </div>
       <!--------------------------------------------------------------------
       -- マップ
       -->
-      <div id="map_grid">
+      <div id="map_grid" style="display:none">
         <div id="map_grid_ui">
+          <!----------------------------------------------------------
+          -- 地図から太陽の位置を選ぶ
+          -->
+          <div id="sun_pseudo_latlng_from_map_ui">
+            太陽の見かけの位置にピンを設置してください。
+            <button id="sun_pseudo_latlng_select">決定</button>
+            <div id="sun_pseudo_latlng_display"></div>
+          </div>
           <!----------------------------------------------------------
           -- 地図から月の位置を選ぶ
           -->
-          <div id="moon_latlng_from_map_ui">
+          <div id="moon_pseudo_latlng_from_map_ui">
             月の見かけの位置にピンを設置してください。
-            <button id="moon_latlng_select">決定</button>
-            <div id="moon_latlng_display"></div>
-          </div>
-          <!----------------------------------------------------------
-          -- 処理中画面
-          -->
-          <div id="progress_ui">
-            <div id="progressbar">
-              <div id="progress_label">開始中</div>
-            </div>
+            <button id="moon_pseudo_latlng_select">決定</button>
+            <div id="moon_pseudo_latlng_display"></div>
           </div>
           <!----------------------------------------------------------
           -- 結果表示画面
@@ -234,8 +228,7 @@
             <button id="result_back">戻る</button>
             <input type="text" id="exported_data">
             <button id="openGoogleMap">🗺️</button><br>
-            <select id="timing_list">
-            </select><br>
+            <select id="timing_list"> </select><br>
             位置: <span id="result_selected_latlng"></span><br>
           </div>
         </div><!-- id="map_grid_ui" -->

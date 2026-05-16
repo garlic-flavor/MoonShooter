@@ -1,3 +1,4 @@
+import { $ } from 'jquery';
 import * as L from "leaflet";
 // 地球の半径(m)(赤道の値。ただし、ここで地球は真球と近似する。)
 // https://ja.wikipedia.org/wiki/%E5%9C%B0%E7%90%83%E5%8D%8A%E5%BE%84

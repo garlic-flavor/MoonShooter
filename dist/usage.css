@@ -1,0 +1,53 @@
+
+/*********************************************************************
+ * 使い方画面
+ */
+div + div {
+  margin-top: 1lh;
+}
+
+h1 {
+  display: block;
+  background: linear-gradient(darkblue, skyblue);
+  color: yellow;
+  text-align: center;
+}
+h2 {
+  border-left: 15px solid darkblue;
+  border-bottom: 4px solid skyblue;
+  padding-left: 1em;
+}
+#license {
+  margin-top: -0.5lh;
+  text-align: right;
+}
+#acknowledgement > dl {
+  display: grid;
+  grid-template-columns: max-content auto;
+}
+#acknowledgement dt {
+  margin-left: 1em;
+}
+#acknowledgement dt::before {
+  content: "⚫︎";
+  color: darkblue;
+}
+#acknowledgement dt {
+  grid-column-start: 1;
+}
+#acknowledgement dd {
+  grid-column-start: 2;
+}
+
+#usage dt {
+  display: inline;
+  border-bottom: 2px solid skyblue;
+  border-left: 5px solid darkblue;
+  padding-left: 0.5em;
+  margin-left: 1em;
+}
+#usage dd {
+  margin-bottom: 1lh;
+}
+
+

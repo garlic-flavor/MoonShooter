@@ -1,11 +1,93 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <meta charset="utf-8">
-    <title>MoonShooter Live Demo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moon Shooter GithubPage</title>
+    <link rel="stylesheet" href="./dist/usage.css">
   </head>
   <body>
-    <h1>MoonShooter Live Demo</title>
-    <a href="./dist/index.html">DEMO</a>
+    <h1>月ドン君1号 ver0.002β</h1>
+<p>© 2026 市川宏規</p>
+<h2>Description</h2>
+<p>国土地理院地図上に月ドンラインを引きます。　</p>
+<h2>Live Demo</h2>
+<ul>
+<li><a href="./dist/index.html">Live Demo</a></li>
+</ul>
+<h2>Acknowledgement</h2>
+<p>このソフトウェアは以下のツールを利用しています。</p>
+<ul>
+<li><strong>開発環境構築</strong><br />
+<a href="https://nodejs.org/ja">Node.JS</a></li>
+<li><strong>トランスパイラ</strong><br />
+<a href="https://www.typescriptlang.org">TypeScript</a></li>
+<li><strong>DOMハンドリング</strong><br />
+<a href="https://jquery.com">jQuery</a></li>
+<li><strong>UI</strong><br />
+<a href="https://jqueryui.com">jQuery-UI</a></li>
+<li><strong>地図/標高データ</strong><br />
+<a href="https://www.gsi.go.jp">国土地理院地図</a></li>
+<li><strong>地図表示</strong><br />
+<a href="https://leafletjs.com">leaflet</a></li>
+<li><strong>月情報計算</strong><br />
+<a href="https://www.npmjs.com/package/@noim/suncalc3?activeTab=code">SunCalc3</a></li>
+<li><strong>ライブラリホスト</strong><br />
+<a href="https://unpkg.com">unpkg</a></li>
+<li><strong>Markdown Rendering</strong><br />
+<a href="https://www.npmjs.com/package/cmark-gfm?activeTab=code">cmark-gfm</a></li>
+</ul>
+<h2>Github Repository</h2>
+<ul>
+<li><a href="https://github.com/garlic-flavor/MoonShooter">garlic-flavor's Github</a></li>
+<li><a href="https://garlic-flavor.github.io/MoonShooter">Github Pgae</a></li>
+</ul>
+<h2>License</h2>
+<p><a href="./dist/LICENSE.txt">MIT License</a></p>
+<h2>使い方</h2>
+<ol>
+<li><strong>月の見かけの位置を設定する。</strong><br />
+月の見かけの位置とは、「もし、現地に建物も木も何もなく、月が&quot;書き割り&quot;で描かれていた場合、その&quot;書き割り&quot;の設置位置」のこと。
+<strong>地図で指定</strong> ボタンを押して地図上にピンをドロップするか、緯度,経度ボックスに直接入力して設定する。</li>
+<li><strong>月の見かけの高さを設定する。</strong><br />
+月の見かけの高さとは、「&quot;書き割り&quot;の下端からそれに描かれた月の中心までの長さ」のこと。
+丁度建物の高さを指定すると、建物の最上部に月の中心が来るようになる。</li>
+<li><strong>観測者の高さを設定する。</strong><br />
+地面から測った視線の高さ、あるいは設置するカメラの高さを指定する。
+橋など、建造物の上から撮影する場合、その分の高さを含める必要がある。</li>
+<li><strong>調べる距離を設定する。</strong>
+計算はこの範囲で行われる。
+あまり広い範囲を指定すると計算に時間がかかる。</li>
+<li><strong>観測日、調べる時間を設定する。</strong><br />
+計算はこの範囲で行われる。
+あまり広い範囲を指定しても、意味がないと思われる。</li>
+<li><strong>実行ボタンでその日の月ドンラインを地図上に表示する。</strong></li>
+</ol>
+<h2>問題点</h2>
+<ul>
+<li>
+<p><strong>建物や樹を考慮しない。</strong><br />
+観測点から実際に対象物が見えるかどうかを考慮していません。
+現地では手前のビルに隠れて対象が見えないかもしれません。</p>
+</li>
+<li>
+<p><strong>観測者が居る建物を考慮しない。</strong><br />
+例えば橋の上から撮影する場合、地表から橋の上までの高さを「観測者の高さ」に加えて入力する必要があります。
+ただし、時間に応じて月ドンポイントが地図上を移動し、現地での高さは変化していくことに対して、「観測者の高さ」は一つしか設定できません。</p>
+</li>
+<li>
+<p><strong>対象物の背後を調べない。</strong><br />
+実際には遠くの山に隠れて月はまだ見えない状況かもしれませんが、これを考慮しません。</p>
+</li>
+<li>
+<p><strong>その他の誤差の要因</strong></p>
+<ul>
+<li>地球を真球と仮定しています。</li>
+<li>座標計算に高緯度、特に極付近の処理をしていません。</li>
+</ul>
+</li>
+</ul>
+<p>now, under construction....</p>
+
   </body>
 </html>
