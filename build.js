@@ -65,6 +65,9 @@ function hrefToUnpkg() {
       "./scripts/leaflet/leaflet-src.esm.js",
       "https://unpkg.com/leaflet/dist/leaflet-src.esm.js"
     ).replace (
+      "./scripts/leaflet/leaflet.css",
+      "https://unpkg.com/leaflet/dist/leaflet.css"
+    ).replace (
       "./scripts/suncalc3/suncalc.js",
       "https://unpkg.com/@noim/suncalc3/suncalc.js");
   
