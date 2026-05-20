@@ -12,9 +12,11 @@
   "main": "index.html",
   "scripts": {
     "build": "node ./build.js all",
-    "release": "node ./build.js release"
+    "release": "npm run biome && node ./build.js release",
+    "biome": "npx @biomejs/biome check --write"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.15",
     "@noim/suncalc3": "^2.0.5",
     "@types/jquery": "^4.0.0",
     "@types/leaflet": "^1.9.21",
@@ -23,7 +25,6 @@
     "http-server": "^14.1.1",
     "jquery": "^4.0.0",
     "leaflet": "^1.9.4",
-    "prettier": "^3.8.3",
     "typescript": "^6.0.3"
   }
 }

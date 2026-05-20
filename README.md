@@ -1,13 +1,13 @@
-# 月ドン君1号 ver0.002β
+# 月ドン君1号 ver0.003β
 &copy; 2026 市川宏規
 
-## Description
+## 説明
 国土地理院地図上に月ドンラインを引きます。　
 
 ## Live Demo
 - [Live Demo](./dist/index.html)
 
-## Acknowledgement
+## 謝辞
 このソフトウェアは以下のツールを利用しています。
 - __開発環境構築__  
   [Node.JS](https://nodejs.org/ja)
@@ -15,8 +15,6 @@
   [TypeScript](https://www.typescriptlang.org)
 - __DOMハンドリング__  
   [jQuery](https://jquery.com)
-- __UI__  
-  [jQuery-UI](https://jqueryui.com)
 - __地図/標高データ__  
   [国土地理院地図](https://www.gsi.go.jp)
 - __地図表示__  
@@ -25,14 +23,16 @@
   [SunCalc3](https://www.npmjs.com/package/@noim/suncalc3?activeTab=code)
 - __ライブラリホスト__  
   [unpkg](https://unpkg.com)
-- __Markdown Rendering__  
+- __Markdownレンダラ__  
   [cmark-gfm](https://www.npmjs.com/package/cmark-gfm?activeTab=code)
+- __コードフォーマッタ__  
+  [Biome](https://biomejs.dev)
 
 ## Github Repository
 - [garlic-flavor's Github](https://github.com/garlic-flavor/MoonShooter)
 - [Github Pgae](https://garlic-flavor.github.io/MoonShooter)
 
-## License
+## ライセンス
 [MIT License](./dist/LICENSE.txt)
 
 ## 使い方
@@ -69,4 +69,12 @@
     + 地球を真球と仮定しています。
     + 座標計算に高緯度、特に極付近の処理をしていません。
 
-now, under construction....
+## 履歴
+- 2026/05/20 0.003  
+  + 写真地図追加
+  + 太陽、月の見かけの大きさの表示
+- 2026/05/17 0.002  
+  + 太陽に対応
+  + モバイル対応
+- 2026/05/10 0.001  
+  + first commit

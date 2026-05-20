@@ -1,0 +1,16 @@
+{
+  "formatter": {
+    "indentStyle": "space"
+  },
+  "files": {
+    "includes": ["**", "!dist"]
+  },
+  "linter": {
+    "includes": ["**", "!dist"],
+    "rules": {
+      "suspicious": {
+        "noExplicitAny": "off"
+      }
+    }
+  }
+}

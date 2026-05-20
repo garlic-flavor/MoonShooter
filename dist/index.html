@@ -16,12 +16,15 @@
     <script type="module" src="./scripts/main.mjs"></script>
   </head>
   <body>
+    <!--------------------------------------------------------------------
+      -- Javascript実行テスト。すぐ消す。
+      -->
     <div id="javascript_notice_container">
       このソフトウェアはJavaScriptを利用しています。
       ブラウザのJavaScript実行を有効にしてください。
     </div>
     <script type="text/javascript">
-      document.getElementById("javascript_notice_container").style.display = 'none';
+      document.getElementById('javascript_notice_container').style.display = 'none';
     </script>
     <div id="root" style="display:none">
       <!--------------------------------------------------------------------
@@ -41,8 +44,8 @@
           <label for="history">履歴から</label>
           <select id="history"> </select>
           <label for="data_to_import"> / JSONから</label>
-          <input type="text" id="data_to_import" value=''>
-          <button id="import_data">読み込む</button>
+          <input type="text" id="data_to_import" value="">
+          <button type="button" id="import_data">読み込む</button>
         </fieldset><!-- legend="読み込み" -->
 
         <!----------------------------------------------------------
@@ -50,7 +53,7 @@
         -->
         <fieldset>
           <legend>観測対象</legend>
-          <input type='radio' id="sun_rise" value="sun_rise"
+          <input type="radio" id="sun_rise" value="sun_rise"
             name="target_type">
           <label for="sun_rise">日の出</label>
 
@@ -58,137 +61,114 @@
             name="target_type">
           <label for="sun_set">日の入り</label>
 
-          <input type='radio' id="moon_rise" value='moon_rise'
-            name='target_type' checked>
-          <label for='moon_rise'>月の出</label>
+          <input type="radio" id="moon_rise" value="moon_rise"
+            name="target_type" checked>
+          <label for="moon_rise">月の出</label>
 
-          <input type='radio' id="moon_set" value="moon_set"
-            name='target_type'>
+          <input type="radio" id="moon_set" value="moon_set"
+            name="target_type">
           <label for="moon_set">月の入り</label>
         </fieldset><!-- legend="観測対象" -->
 
         <!----------------------------------------------------------
-        -- 太陽に関して
+        -- 対象の位置
         -->
-        <div id="about_sun" style="display:none">
-          <!------------------------------------------------
-          -- 太陽の見かけの位置
-          -->
-          <fieldset id="about_sum_pseudo_latlng">
-            <legend>太陽の見かけの位置</legend>
-            <label for="sun_pseudo_latlng">緯度,経度</label>
-            <input id="sun_pseudo_latlng" type="text" value='34.83680790610885,134.69328403472903'>
-            <button id="set_sun_pseudo_latlng_from_map">地図で指定</button>
-      <!-- //const DefaultCenter = L.latLng (36.104611, 140.084556); -->
-            <br>
-            <label for='sun_pseudo_height'>太陽の見かけの高さ</label>
-            <input type="number" id="sun_pseudo_height" value="30">
-            <label for='sun_pseudo_height'>m</label><br>
-          </fieldset><!-- legend="太陽の見かけの位置" -->
+        <fieldset id="about_target_pseudo_latlng">
+          <legend>対象の見かけの位置</legend>
+          <label for="target_pseudo_latlng">緯度,経度</label>
+          <input id="target_pseudo_latlng" type="text" value="34.83944988880835,134.69393849372867">
+          <button type="button" id="set_target_pseudo_latlng_from_map">地図で指定</button>
+    <!-- //const DefaultCenter = L.latLng (36.104611, 140.084556); -->
+          <br>
+          <label for="target_pseudo_height">対象の見かけの高さ</label>
+          <input type="number" id="target_pseudo_height" value="30">
+          <label for="target_pseudo_height">m</label><br>
+        </fieldset><!-- legend="対象の見かけの位置" -->
 
-          <!------------------------------------------------
-          -- 太陽の観察日
-          -->
-          <fieldset id="about_sun_observation_day">
-            <legend>観測日</legend>
-            <input type="date" id="sun_observation_day"><br>
-            <dl id="sun_info">
-              <dt>日の出</dt><dd id="sun_info_rise"></dd>
-              <dt>日の入り</dt><dd id="sun_info_set"></dd>
-            </dl>
-            <div id="minutes_about_sun_rise">
-              <label for="minutes_before_sun_rise">日の出の</label>
-              <input type="number" id="minutes_before_sun_rise" value="10">
-              <label for="minutes_before_sun_rise">分前</label> 〜
-  
-              <label for="minutes_after_sun_rise">日の出の</label>
-              <input type="number" id="minutes_after_sun_rise" value="60">
-              <label for="minutes_after_sun_rise">分後まで</label>
-            </div>
-            <div id="minutes_about_sun_set">
-              <label for="minutes_before_sun_set">日の入りの</label>
-              <input type="number" id="minutes_before_sun_set" value="60">
-              <label for="minutes_before_sun_set">分前</label> 〜
-              <label for="minutes_after_sun_set">日の入りの</label>
-              <input type="number" id="minutes_after_sun_set" value="10">
-              <label for="minutes_after_sun_set">分後まで</label>
-            </div>
-          </fieldset> <!-- legend="太陽の観測日" -->
-        </div><!-- aboud_sun -->
-
-        <!----------------------------------------------------------
-        -- 月に関して
+        <!------------------------------------------------
+        -- 太陽の観察日
         -->
-        <div id="about_moon">
-          <!------------------------------------------------
-          -- 月の見かけの位置
-          -->
-          <fieldset id="about_moon_pseudo_latlng">
-            <legend>月の見かけの位置</legend>
-            <label for="moon_pseudo_latlng">緯度,経度</label>
-            <input id="moon_pseudo_latlng" type="text" value='34.83680790610885,134.69328403472903'>
-            <button id="set_moon_pseudo_latlng_from_map">地図で指定</button>
-            <br>
-            <label for='moon_pseudo_height'>月の見かけの高さ</label>
-            <input type="number" id="moon_pseudo_height" value="30">
-            <label for='moon_pseudo_height'>m</label><br>
-          </fieldset><!-- legend="月の見かけの位置" -->
+        <fieldset id="about_sun_observation_day" style="display:none">
+          <legend>観測日</legend>
+          <input type="date" id="sun_observation_day"><br>
+          <dl id="sun_info">
+            <dt>日の出</dt><dd id="sun_info_rise"></dd>
+            <dt>日の入り</dt><dd id="sun_info_set"></dd>
+          </dl>
+          <div id="minutes_about_sun_rise">
+            <label for="minutes_before_sun_rise">日の出の</label>
+            <input type="number" id="minutes_before_sun_rise" value="10">
+            <label for="minutes_before_sun_rise">分前</label> 〜
 
-          <!------------------------------------------------
-          -- 月の観察日
-          -->
-          <fieldset id="about_moon_observation_day">
-            <legend>観測日</legend>
-            <button id="get_prev_fullmoon">前の満月</button>
-            <input type="date" id="moon_observation_day">
-            <button id="get_next_fullmoon">次の満月</button>
-            <dl id="moon_info">
-              <dt>満ち欠け</dt><dd id="moon_info_fraction"></dd>
-              <dt>月の出</dt><dd id="moon_info_rise"></dd>
-              <dt>月の入り</dt><dd id="moon_info_set"></dd>
-            </dl>
-            <div id="minutes_about_moon_rise">
-              <label for="minutes_before_moon_rise">月の出の</label>
-              <input type="number" id="minutes_before_moon_rise" value="10">
-              <label for="minutes_before_moon_rise">分前</label> 〜
-  
-              <label for="minutes_after_moon_rise">月の出の</label>
-              <input type="number" id="minutes_after_moon_rise" value="60">
-              <label for="minutes_after_moon_rise">分後まで</label>
-            </div>
-            <div id="minutes_about_moon_set" style="display:none">
-              <label for="minutes_before_moon_set">月の入りの</label>
-              <input type="number" id="minutes_before_moon_set" value="60">
-              <label for="minutes_before_moon_set">分前</label> 〜
-  
-              <label for="minutes_after_moon_set">月の入りの</label>
-              <input type="number" id="minutes_after_moon_set" value="10">
-              <label for="minutes_after_moon_set">分後まで</label>
-            </div>
-          </fieldset><!-- legend="月の観測日" -->
-        </div><!-- about_moon -->
+            <label for="minutes_after_sun_rise">日の出の</label>
+            <input type="number" id="minutes_after_sun_rise" value="60">
+            <label for="minutes_after_sun_rise">分後まで</label>
+          </div>
+          <div id="minutes_about_sun_set">
+            <label for="minutes_before_sun_set">日の入りの</label>
+            <input type="number" id="minutes_before_sun_set" value="60">
+            <label for="minutes_before_sun_set">分前</label> 〜
+            <label for="minutes_after_sun_set">日の入りの</label>
+            <input type="number" id="minutes_after_sun_set" value="10">
+            <label for="minutes_after_sun_set">分後まで</label>
+          </div>
+        </fieldset> <!-- legend="太陽の観測日" -->
+
+
+        <!------------------------------------------------
+        -- 月の観察日
+        -->
+        <fieldset id="about_moon_observation_day">
+          <legend>観測日</legend>
+          <button type="button" id="get_prev_fullmoon">前の満月</button>
+          <input type="date" id="moon_observation_day">
+          <button type="button" id="get_next_fullmoon">次の満月</button>
+          <dl id="moon_info">
+            <dt>満ち欠け</dt><dd id="moon_info_fraction"></dd>
+            <dt>月の出</dt><dd id="moon_info_rise"></dd>
+            <dt>月の入り</dt><dd id="moon_info_set"></dd>
+          </dl>
+          <div id="minutes_about_moon_rise">
+            <label for="minutes_before_moon_rise">月の出の</label>
+            <input type="number" id="minutes_before_moon_rise" value="10">
+            <label for="minutes_before_moon_rise">分前</label> 〜
+
+            <label for="minutes_after_moon_rise">月の出の</label>
+            <input type="number" id="minutes_after_moon_rise" value="60">
+            <label for="minutes_after_moon_rise">分後まで</label>
+          </div>
+          <div id="minutes_about_moon_set" style="display:none">
+            <label for="minutes_before_moon_set">月の入りの</label>
+            <input type="number" id="minutes_before_moon_set" value="60">
+            <label for="minutes_before_moon_set">分前</label> 〜
+
+            <label for="minutes_after_moon_set">月の入りの</label>
+            <input type="number" id="minutes_after_moon_set" value="10">
+            <label for="minutes_after_moon_set">分後まで</label>
+          </div>
+        </fieldset><!-- legend="月の観測日" -->
 
         <!------------------------------------------------
         -- 観測者
         -->
         <fieldset>
           <legend>観測者</legend>
-          <label for='camera_height'>観測者の高さ</label>
+          <label for="camera_height">観測者の高さ</label>
           <input type="number" id="camera_height" value="1.5">
-          <label for='camera_height'>m</label><br>
+          <label for="camera_height">m</label><br>
   
-          <label for='far_distance'>調べる距離 〜 </label>
+          <label for="far_distance">調べる距離 〜 </label>
           <input type="number" id="far_distance" value="10">
-          <label for='far_distance'>km</label><br>
+          <label for="far_distance">km</label><br>
         </fieldset><!-- legend="観測者" -->
         <!--==============================================
         == 実行
         -->
         <div id="submit_button_container">
-          <button id="exec_for_sun_rise" style="display:none">実行</button>
-          <button id="exec_for_sun_set" style="display:none">実行</button>
-          <button id="exec_for_moon_rise">実行</button>
-          <button id="exec_for_moon_set" style="display:none">実行</button>
+          <button type="button" id="exec_for_sun_rise" style="display:none">実行</button>
+          <button type="button" id="exec_for_sun_set" style="display:none">実行</button>
+          <button type="button" id="exec_for_moon_rise">実行</button>
+          <button type="button" id="exec_for_moon_set" style="display:none">実行</button>
         </div>
       </div><!-- id="main_form" -->
       <!----------------------------------------------------------
@@ -206,30 +186,22 @@
       <div id="map_grid" style="display:none">
         <div id="map_grid_ui">
           <!----------------------------------------------------------
-          -- 地図から太陽の位置を選ぶ
+          -- 地図から対象の位置を選ぶ
           -->
-          <div id="sun_pseudo_latlng_from_map_ui">
-            太陽の見かけの位置にピンを設置してください。
-            <button id="sun_pseudo_latlng_select">決定</button>
-            <div id="sun_pseudo_latlng_display"></div>
-          </div>
-          <!----------------------------------------------------------
-          -- 地図から月の位置を選ぶ
-          -->
-          <div id="moon_pseudo_latlng_from_map_ui">
-            月の見かけの位置にピンを設置してください。
-            <button id="moon_pseudo_latlng_select">決定</button>
-            <div id="moon_pseudo_latlng_display"></div>
+          <div id="target_pseudo_latlng_from_map_ui">
+            対象の見かけの位置にピンを設置してください。
+            <button type="button" id="target_pseudo_latlng_select">決定</button>
+            <div id="target_pseudo_latlng_display"></div>
           </div>
           <!----------------------------------------------------------
           -- 結果表示画面
           -->
           <div id="result_ui">
-            <button id="result_back">戻る</button>
+            <button type="button" id="result_back">戻る</button>
             <input type="text" id="exported_data">
-            <button id="openGoogleMap">🗺️</button><br>
+            <button type="button" id="openGoogleMap">🗺️</button><br>
             <select id="timing_list"> </select><br>
-            位置: <span id="result_selected_latlng"></span><br>
+            <div id="info"></div>
           </div>
         </div><!-- id="map_grid_ui" -->
         <div id="map_container"></div>

@@ -37,8 +37,8 @@
     // "jsx": "react-jsx",
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
-//    "noUncheckedSideEffectImports": true,
-//    "moduleDetection": "force",
+    //    "noUncheckedSideEffectImports": true,
+    //    "moduleDetection": "force",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
@@ -47,12 +47,7 @@
     "strictBindCallApply": true,
     "strictPropertyInitialization": true,
     "noImplicitThis": true,
-    "alwaysStrict": true,
+    "alwaysStrict": true
   },
-  "files": [
-    "src/main.mts",
-    "src/altitude.mts",
-    "src/dom.mts",
-    "src/map.mts"
-  ]
+  "files": ["src/main.mts", "src/altitude.mts", "src/dom.mts", "src/map.mts"]
 }
