@@ -105,7 +105,15 @@ export function setTargetPseudoLatLng(ll: L.LatLng) {
 //==========================================================
 // フォームから対象の位置を得る。
 export function getTargetPseudoLatLng(): L.LatLng {
-  const ll = JSON.parse(`[${$("#target_pseudo_latlng").val() as string}]`);
+  const res = /\/@([0-9.]+),([0-9.]+),\d\d?z\//.exec(
+    $("#target_pseudo_latlng").val() as string,
+  );
+  let ll: number[];
+  if (res) {
+    ll = [Number(res[1]), Number(res[2])];
+  } else {
+    ll = JSON.parse(`[${$("#target_pseudo_latlng").val() as string}]`);
+  }
   if (ll[0] == null || ll[1] == null) {
     throw "対象の見かけの位置が読み取れませんでした。";
   }
