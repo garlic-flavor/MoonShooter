@@ -91,7 +91,11 @@ export class MyMap {
   //==========================================================
   startToSetTargetPseudoLatLng(ll?: L.LatLng) {
     this.map.invalidateSize(true);
-    this.marker.remove().off("dragend").on("dragend", this.updateTargetDisplay);
+    this.marker
+      .remove()
+      .off("dragend")
+      .on("dragend", () => this.updateTargetDisplay());
+
     if (ll) {
       this.setMarker(ll);
     }
