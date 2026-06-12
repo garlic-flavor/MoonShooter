@@ -1,6 +1,10 @@
 /*********************************************************************
  * 全体
  */
+html,
+body {
+  touch-action: manipulation;
+}
 button {
   font-size: 20pt;
 }

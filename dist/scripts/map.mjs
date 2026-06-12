@@ -17,7 +17,7 @@ export class MyMap {
     thinOpacity = 0.5;
     //----------------------------------------------------------
     constructor() {
-        this.map = L.map("map_container").setView(DefaultCenter, 5);
+        this.map = L.map("map_container").setView(DefaultCenter, 15);
         const stdMap = L.tileLayer(MapURL, {
             attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank">地理院タイル</a>',
             maxZoom: 18,

@@ -2,7 +2,7 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Moon Shooter</title>
     <link rel="stylesheet" href="./scripts/leaflet/leaflet.css">
     <link rel="stylesheet" href="./base.css">
@@ -36,17 +36,6 @@
           <label for="session_name">参照名</label>
           <input type="text" id="session_name"><br>
         </div>
-        <!----------------------------------------------------------
-        -- 読み込み
-        -->
-        <fieldset>
-          <legend>読み込み</legend>
-          <label for="history">履歴から</label>
-          <select id="history"> </select>
-          <label for="data_to_import"> / JSONから</label>
-          <input type="text" id="data_to_import" value="">
-          <button type="button" id="import_data">読み込む</button>
-        </fieldset><!-- legend="読み込み" -->
 
         <!----------------------------------------------------------
         -- 観察天体
@@ -77,6 +66,10 @@
           <legend>対象の見かけの位置</legend>
           <label for="target_pseudo_latlng">緯度,経度</label>
           <input id="target_pseudo_latlng" type="text" value="34.83944988880835,134.69393849372867">
+          <br>
+          <!--
+          <button type="button" id="set_target_pseudo_latlng_from_clipboard">クリップボードから読み込み</button><br>
+          -->
           <button type="button" id="set_target_pseudo_latlng_from_map">地図で指定</button>
     <!-- //const DefaultCenter = L.latLng (36.104611, 140.084556); -->
           <br>
@@ -170,6 +163,25 @@
           <button type="button" id="exec_for_moon_rise">実行</button>
           <button type="button" id="exec_for_moon_set" style="display:none">実行</button>
         </div>
+        <!----------------------------------------------------------
+        -- 読み込み
+        -->
+        <button type="button" id="show_history_field_button">
+          ▷履歴
+        </button>
+        <button type="button" id="hide_history_field_button" style="display:none">
+          ▼履歴
+        </button>
+        <fieldset id="history_field" style="display:none">
+          <legend>読み込み</legend>
+          <label for="history">履歴から</label>
+          <select id="history"> </select>
+          <br>
+          <label for="data_to_import"> JSONから</label>
+          <input type="text" id="data_to_import" value="">
+          <br>
+          <button type="button" id="import_data">読み込む</button>
+        </fieldset><!-- legend="読み込み" -->
       </div><!-- id="main_form" -->
       <!----------------------------------------------------------
       -- 処理中画面

@@ -100,19 +100,19 @@ export function setTargetPseudoLatLng(ll) {
 }
 //==========================================================
 // フォームから対象の位置を得る。
+function getLatLng(str) {
+    const match = /[^-+0-9]*([+-]?[0-9]+\.[0-9]*)[^-+0-9]*([+-]?[0-9]+\.[0-9]*)/.exec(str);
+    if (match) {
+        return L.latLng(Number(match[1]), Number(match[2]));
+    }
+    return undefined;
+}
 export function getTargetPseudoLatLng() {
-    const res = /\/@([0-9.]+),([0-9.]+),\d\d?z\//.exec($("#target_pseudo_latlng").val());
-    let ll;
-    if (res) {
-        ll = [Number(res[1]), Number(res[2])];
-    }
-    else {
-        ll = JSON.parse(`[${$("#target_pseudo_latlng").val()}]`);
-    }
-    if (ll[0] == null || ll[1] == null) {
+    const ll = getLatLng($("#target_pseudo_latlng").val());
+    if (!ll) {
         throw "対象の見かけの位置が読み取れませんでした。";
     }
-    return L.latLng(ll[0], ll[1]);
+    return ll;
 }
 //==========================================================
 // 対象の位置を地図から選ぶ画面を出す。

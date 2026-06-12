@@ -17,14 +17,40 @@ $(document).ready(() => {
     //----------------------------------------------------------
     // 対象の見かけの位置を地図から選ぶ
     $("#set_target_pseudo_latlng_from_map").on("click", () => {
-        D.showMapToSetTargetPseudoLatLng();
-        M.startToSetTargetPseudoLatLng(D.getTargetPseudoLatLng());
+        try {
+            const ll = D.getTargetPseudoLatLng();
+            D.showMapToSetTargetPseudoLatLng();
+            M.startToSetTargetPseudoLatLng(ll);
+        }
+        catch (error) {
+            alert(error);
+        }
     });
     //----------------------------------------------------------
     // 対象の見かけの位置を地図から選び、決定する。
     $("#target_pseudo_latlng_select").on("click", () => {
         D.setTargetPseudoLatLng(M.getAndEndSelectPseudoLatLng());
         D.showForms();
+    });
+    //----------------------------------------------------------
+    // 対象の位置をクリップボードから読み込む。
+    $("#target_pseudo_latlng").on("paste", async (e) => {
+        e.preventDefault();
+        const txt = await navigator.clipboard.readText();
+        $(e.target).val(txt);
+        $("#set_target_pseudo_latlng_from_map").trigger("click");
+    });
+    //----------------------------------------------------------
+    // 履歴トグルボタン
+    $("#show_history_field_button").on("click", (e) => {
+        $(e.target).hide();
+        $("#hide_history_field_button").show();
+        $("#history_field").show();
+    });
+    $("#hide_history_field_button").on("click", (e) => {
+        $(e.target).hide();
+        $("#show_history_field_button").show();
+        $("#history_field").hide();
     });
     //////////////////////////////////////////////////////////////////////
     // 観測日

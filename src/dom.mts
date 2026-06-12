@@ -104,20 +104,20 @@ export function setTargetPseudoLatLng(ll: L.LatLng) {
 
 //==========================================================
 // フォームから対象の位置を得る。
-export function getTargetPseudoLatLng(): L.LatLng {
-  const res = /\/@([0-9.]+),([0-9.]+),\d\d?z\//.exec(
-    $("#target_pseudo_latlng").val() as string,
-  );
-  let ll: number[];
-  if (res) {
-    ll = [Number(res[1]), Number(res[2])];
-  } else {
-    ll = JSON.parse(`[${$("#target_pseudo_latlng").val() as string}]`);
+function getLatLng(str: string): L.LatLng | undefined {
+  const match =
+    /[^-+0-9]*([+-]?[0-9]+\.[0-9]*)[^-+0-9]*([+-]?[0-9]+\.[0-9]*)/.exec(str);
+  if (match) {
+    return L.latLng(Number(match[1]), Number(match[2]));
   }
-  if (ll[0] == null || ll[1] == null) {
+  return undefined;
+}
+export function getTargetPseudoLatLng(): L.LatLng {
+  const ll = getLatLng($("#target_pseudo_latlng").val() as string);
+  if (!ll) {
     throw "対象の見かけの位置が読み取れませんでした。";
   }
-  return L.latLng(ll[0], ll[1]);
+  return ll;
 }
 
 //==========================================================
