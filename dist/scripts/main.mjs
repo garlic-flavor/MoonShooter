@@ -154,8 +154,8 @@ $(document).ready(() => {
             // export
             D.exportResult(formData, ll, line);
         }
-        catch (err) {
-            alert(err);
+        catch {
+            alert("処理に失敗しました。");
         }
     }
     //------------------------------------------------
@@ -247,8 +247,8 @@ $(document).ready(() => {
             // export
             D.exportResult(formData, ll, line);
         }
-        catch (err) {
-            alert(err);
+        catch {
+            alert("処理に失敗しました。");
         }
     }
     //------------------------------------------------

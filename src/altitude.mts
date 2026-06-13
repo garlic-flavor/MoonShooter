@@ -22,55 +22,52 @@ function getURL(p: L.Point, zoom: number): string {
 
 //--------------------------------------------------------------------
 // 画像サーバキャッシュ付き
-const get$canvas = (() => {
-  // $canvasのキャッシュ。
-  const cache = new Map();
-  // 古いキャッシュは消す。
-  const MAX_CACHE = 20;
-  //----------------------------------------------------------
-  return async (
-    tile: L.Point,
-    zoom: number,
-  ): Promise<JQuery<HTMLCanvasElement>> => {
-    const key = { x: tile.x, y: tile.y, z: zoom };
-    // 既存のタイルだった。
-    if (cache.has(key)) {
-      return cache.get(key);
-    }
-    // 新しいタイルだった。
-    // キャッシュを切り詰める。
-    if (MAX_CACHE < cache.size) {
-      cache.delete(cache.keys().next().value);
-    }
-    const url = getURL(tile, zoom);
-    // 画像を追加する。
-    const img = (
-      (await new Promise((resolve, reject) => {
-        $("<img>").on("load", resolve).on("error", reject).attr({
-          crossOrigin: "Anonymous",
-          src: url,
-        });
-      })) as Event
-    ).target as HTMLImageElement;
-    if (!img) {
-      throw `failed to load ${url}.`;
-    }
-    // canvasに描画する。
-    const $canvas = $("<canvas>").attr({
-      width: img.width,
-      height: img.height,
-      src: img.src,
-    }) as JQuery<HTMLCanvasElement>;
-    const ctx = $canvas[0]?.getContext("2d");
-    if (!ctx) {
-      throw `failed to getContext: ${tile} / ${zoom}`;
-    }
-    ctx.drawImage(img, 0, 0);
-    // キャッシュに保存する。
-    cache.set(key, $canvas);
-    return $canvas;
-  };
-})();
+// $canvasのキャッシュ。
+const cache = new Map();
+// 古いキャッシュは消す。
+const MAX_CACHE = 20;
+async function get$canvas(
+  tile: L.Point,
+  zoom: number,
+): Promise<JQuery<HTMLCanvasElement>> {
+  const key = { x: tile.x, y: tile.y, z: zoom };
+  // 既存のタイルだった。
+  if (cache.has(key)) {
+    return cache.get(key);
+  }
+  // 新しいタイルだった。
+  // キャッシュを切り詰める。
+  if (MAX_CACHE < cache.size) {
+    cache.delete(cache.keys().next().value);
+  }
+  const url = getURL(tile, zoom);
+  // 画像を追加する。
+  const img = (
+    (await new Promise((resolve, reject) => {
+      $("<img>").on("load", resolve).on("error", reject).attr({
+        crossOrigin: "Anonymous",
+        src: url,
+      });
+    })) as Event
+  ).target as HTMLImageElement;
+  if (!img) {
+    throw `failed to load ${url}.`;
+  }
+  // canvasに描画する。
+  const $canvas = $("<canvas>").attr({
+    width: img.width,
+    height: img.height,
+    src: img.src,
+  }) as JQuery<HTMLCanvasElement>;
+  const ctx = $canvas[0]?.getContext("2d");
+  if (!ctx) {
+    throw `failed to getContext: ${tile} / ${zoom}`;
+  }
+  ctx.drawImage(img, 0, 0);
+  // キャッシュに保存する。
+  cache.set(key, $canvas);
+  return $canvas;
+}
 
 //--------------------------------------------------------------------
 // 座標からタイルの位置を得る。
@@ -119,7 +116,8 @@ function getHeightFrom$canvas(
   const data =
     $canvas[0]?.getContext("2d")?.getImageData(p.x, p.y, 1, 1)?.data ?? null;
   if (data == null || data[0] == null || data[1] == null || data[2] == null) {
-    throw `failed to getHeightFrom$canvas: ${p}`;
+    return Number.NaN;
+    //throw `failed to getHeightFrom$canvas: ${p}`;
   }
   return getHeightFromRGB(data[0], data[1], data[2]);
 }
@@ -128,8 +126,12 @@ function getHeightFrom$canvas(
 async function getHeightOfCoord(coord: L.Point, zoom: number): Promise<number> {
   const tile = getTileXYFromCoord(coord);
   const p = getPointOnTileFromCoord(coord);
-  const $canvas = await get$canvas(tile, zoom);
-  return getHeightFrom$canvas($canvas, p);
+  try {
+    const $canvas = await get$canvas(tile, zoom);
+    return getHeightFrom$canvas($canvas, p);
+  } catch {
+    return Number.NaN;
+  }
 }
 
 //====================================================================
@@ -168,6 +170,7 @@ export async function getShadow(
   let prevll = target;
   let prevalt = tip_height;
   let prevdist = 0;
+  let prevheight = 0;
   for (let i = 0; ; i++) {
     const coord = L.point(
       origin.x + (i + 1) * 1.5 * shadow_cos,
@@ -178,9 +181,9 @@ export async function getShadow(
     if (far_distance < dist) {
       break;
     }
-    const h = await getHeightOfCoord(coord, zoom);
-    if (Number.isNaN(h)) {
-      continue;
+    let h = await getHeightOfCoord(coord, zoom);
+    if (h == null || Number.isNaN(h)) {
+      h = prevheight;
     }
 
     // 2点が地球の中心を原点とする極座標系で為す角
@@ -212,6 +215,7 @@ export async function getShadow(
     prevll = ll;
     prevalt = shadow_alt;
     prevdist = dist;
+    prevheight = h;
     progress((i + 1) / test_count);
   }
   return undefined;
