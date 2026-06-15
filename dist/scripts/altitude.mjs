@@ -21,42 +21,51 @@ function getURL(p, zoom) {
 const cache = new Map();
 // 古いキャッシュは消す。
 const MAX_CACHE = 20;
-async function get$canvas(tile, zoom) {
-    const key = { x: tile.x, y: tile.y, z: zoom };
-    // 既存のタイルだった。
-    if (cache.has(key)) {
-        return cache.get(key);
-    }
-    // 新しいタイルだった。
-    // キャッシュを切り詰める。
-    if (MAX_CACHE < cache.size) {
-        cache.delete(cache.keys().next().value);
-    }
-    const url = getURL(tile, zoom);
-    // 画像を追加する。
-    const img = (await new Promise((resolve, reject) => {
-        $("<img>").on("load", resolve).on("error", reject).attr({
+//
+function get$canvas(tile, zoom) {
+    return new Promise((resolve) => {
+        const url = getURL(tile, zoom);
+        // 既存のタイルだった。
+        if (cache.has(url)) {
+            resolve(cache.get(url));
+            return;
+        }
+        // 新しいタイルだった。
+        // キャッシュを切り詰める。
+        if (MAX_CACHE < cache.size) {
+            cache.delete(cache.keys().next().value);
+        }
+        // 画像を追加する。
+        $("<img>")
+            .on("load", (e) => {
+            const img = e.target;
+            // canvasに描画する。
+            const $canvas = $("<canvas>").attr({
+                width: img.width,
+                height: img.height,
+                src: img.src,
+            });
+            const ctx = $canvas[0]?.getContext("2d");
+            if (!ctx) {
+                cache.set(url, null);
+                resolve(null);
+                return;
+            }
+            ctx.drawImage(img, 0, 0);
+            // キャッシュに保存する。
+            cache.set(url, $canvas);
+            resolve($canvas);
+            return;
+        })
+            .on("error", () => {
+            cache.set(url, null);
+            resolve(null);
+        })
+            .attr({
             crossOrigin: "Anonymous",
             src: url,
         });
-    })).target;
-    if (!img) {
-        throw `failed to load ${url}.`;
-    }
-    // canvasに描画する。
-    const $canvas = $("<canvas>").attr({
-        width: img.width,
-        height: img.height,
-        src: img.src,
     });
-    const ctx = $canvas[0]?.getContext("2d");
-    if (!ctx) {
-        throw `failed to getContext: ${tile} / ${zoom}`;
-    }
-    ctx.drawImage(img, 0, 0);
-    // キャッシュに保存する。
-    cache.set(key, $canvas);
-    return $canvas;
 }
 //--------------------------------------------------------------------
 // 座標からタイルの位置を得る。
@@ -96,10 +105,12 @@ function getHeightFromRGB(r, g, b) {
 //--------------------------------------------------------------------
 // 標高画像を格納したcanvas要素から標高を得る。
 function getHeightFrom$canvas($canvas, p) {
+    if (!$canvas) {
+        return Number.NaN;
+    }
     const data = $canvas[0]?.getContext("2d")?.getImageData(p.x, p.y, 1, 1)?.data ?? null;
     if (data == null || data[0] == null || data[1] == null || data[2] == null) {
         return Number.NaN;
-        //throw `failed to getHeightFrom$canvas: ${p}`;
     }
     return getHeightFromRGB(data[0], data[1], data[2]);
 }
@@ -107,13 +118,8 @@ function getHeightFrom$canvas($canvas, p) {
 async function getHeightOfCoord(coord, zoom) {
     const tile = getTileXYFromCoord(coord);
     const p = getPointOnTileFromCoord(coord);
-    try {
-        const $canvas = await get$canvas(tile, zoom);
-        return getHeightFrom$canvas($canvas, p);
-    }
-    catch {
-        return Number.NaN;
-    }
+    const $canvas = await get$canvas(tile, zoom);
+    return getHeightFrom$canvas($canvas, p);
 }
 //====================================================================
 // 緯度経度から標高を得る。
