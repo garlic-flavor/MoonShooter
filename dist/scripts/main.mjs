@@ -148,6 +148,11 @@ $(document).ready(() => {
                 }
                 D.setProgress((i + 1) / timing.length);
             }
+            if (line.length === 0) {
+                alert("この設定ではドンしませんでした。");
+                D.showForms();
+                return;
+            }
             // ドンライン表示
             D.showResult();
             M.startResult(ll, line);
@@ -156,6 +161,7 @@ $(document).ready(() => {
         }
         catch {
             alert("処理に失敗しました。");
+            D.showForms();
         }
     }
     //------------------------------------------------
@@ -241,6 +247,11 @@ $(document).ready(() => {
                 }
                 D.setProgress((i + 1) / timing.length);
             }
+            if (line.length === 0) {
+                alert("この設定ではドンしませんでした。");
+                D.showForms();
+                return;
+            }
             // ドンライン表示
             D.showResult();
             M.startResult(ll, line);
@@ -249,6 +260,7 @@ $(document).ready(() => {
         }
         catch {
             alert("処理に失敗しました。");
+            D.showForms();
         }
     }
     //------------------------------------------------
