@@ -4,6 +4,10 @@
 html,
 body {
   touch-action: manipulation;
+  overflow-x: hidden;
+}
+body {
+  position: relative;
 }
 button {
   font-size: 20pt;
@@ -52,9 +56,20 @@ select {
 #main_form dd {
   grid-column-start: 2;
 }
-#main_form input[type="radio"] {
-  margin-left: 1em;
+
+/**
+ * 観測対象ラジオボタン
+ */
+#main_form input[type="radio"][name="target_type"] {
+  appearance: none;
 }
+#main_form input[type="radio"][name="target_type"] ~ label {
+  display: inline-block;
+}
+#main_form input[type="radio"][name="target_type"]:checked + label {
+  border-bottom: 3px solid blue;
+}
+
 #moon_observation_day {
   width: 7em;
 }
@@ -68,6 +83,14 @@ select {
 }
 #submit_button_container > button {
   width: 100%;
+}
+
+/**
+ * ダイアル
+ */
+.dial {
+  width: 15ch;
+  height: 2lh;
 }
 
 /*********************************************************************

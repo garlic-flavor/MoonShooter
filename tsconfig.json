@@ -49,5 +49,11 @@
     "noImplicitThis": true,
     "alwaysStrict": true
   },
-  "files": ["src/main.mts", "src/altitude.mts", "src/dom.mts", "src/map.mts"]
+  "files": [
+    "src/main.mts",
+    "src/altitude.mts",
+    "src/dom.mts",
+    "src/map.mts",
+    "src/dial.mts"
+  ]
 }

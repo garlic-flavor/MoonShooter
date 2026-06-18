@@ -41,12 +41,14 @@ export function updateHistory(data?: any) {
 // の3つに分けられる。これらを切り替える。
 //==========================================================
 export function showForms() {
+  window.scrollTo(0, 0);
   $("#progress_ui").hide();
   $("#map_grid").hide();
   $("#main_form").show();
 }
 //==========================================================
 export function showProgress() {
+  window.scrollTo(0, 0);
   $("#map_grid").hide();
   $("#main_form").hide();
   $("#progress_ui").show();
@@ -54,6 +56,7 @@ export function showProgress() {
 }
 //==========================================================
 export function showMap() {
+  window.scrollTo(0, 0);
   $("#main_form").hide();
   $("#progress_ui").hide();
   $("#map_grid_ui").children().hide();

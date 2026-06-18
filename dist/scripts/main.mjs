@@ -1,5 +1,6 @@
 import * as SunCalc from "@noim/suncalc3";
 import { $ } from "jquery";
+import makeDial from "./dial.mjs";
 import * as D from "./dom.mjs";
 import { MyMap } from "./map.mjs";
 $(document).ready(() => {
@@ -11,6 +12,8 @@ $(document).ready(() => {
     //----------------------------------------------------------
     // 履歴の設定。
     D.updateHistory();
+    // ダイアルコントロールの設定
+    makeDial(".dial");
     //----------------------------------------------------------
     // 観測対象の設定
     $("input[name='target_type']").on("change", D.targetTypeOnChange);

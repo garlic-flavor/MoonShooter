@@ -1,5 +1,6 @@
 import * as SunCalc from "@noim/suncalc3";
 import { $ } from "jquery";
+import makeDial from "./dial.mjs";
 import * as D from "./dom.mjs";
 import { MyMap } from "./map.mjs";
 import type * as T from "./type.mjs";
@@ -14,6 +15,9 @@ $(document).ready(() => {
   //----------------------------------------------------------
   // 履歴の設定。
   D.updateHistory();
+
+  // ダイアルコントロールの設定
+  makeDial(".dial");
 
   //----------------------------------------------------------
   // 観測対象の設定
@@ -143,7 +147,7 @@ $(document).ready(() => {
       // 結果データを格納する。
       const line: T.LLDI[] = [];
       for (let i = 0; i < timing.length; i++) {
-        const t = timing[i]!;
+        const t = timing[i] as Date;
         const pos = SunCalc.getPosition(t, ll.lat, ll.lng);
         const res = await M.getShadow(
           12,
@@ -251,7 +255,7 @@ $(document).ready(() => {
       // 結果データを格納する。
       const line: T.LLDI[] = [];
       for (let i = 0; i < timing.length; i++) {
-        const t = timing[i]!;
+        const t = timing[i] as Date;
         const pos = SunCalc.getMoonPosition(t, ll.lat, ll.lng);
         // 標高による差分の補正
         pos.altitude = Math.atan(
