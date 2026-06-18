@@ -41,7 +41,6 @@ export function updateHistory(data?: any) {
 // の3つに分けられる。これらを切り替える。
 //==========================================================
 export function showForms() {
-  window.scrollTo(0, 0);
   $("#progress_ui").hide();
   $("#map_grid").hide();
   $("#main_form").show();
@@ -63,42 +62,6 @@ export function showMap() {
   $("#map_grid").show();
 }
 
-//==========================================================
-// ラジオボタンで撮影対象が切り替えられた。
-export function targetTypeOnChange(e: Event) {
-  if (!e.target) {
-    return;
-  }
-  const val = $(e.target).val() as string;
-  $("#submit_button_container").children().hide();
-  if ("sun_rise" === val) {
-    $("#about_sun_observation_day").show();
-    $("#about_moon_observation_day").hide();
-    $("#minutes_about_sun_rise").show();
-    $("#minutes_about_sun_set").hide();
-    $("#exec_for_sun_rise").show();
-  } else if ("sun_set" === val) {
-    $("#about_sun_observation_day").show();
-    $("#about_moon_observation_day").hide();
-    $("#minutes_about_sun_rise").hide();
-    $("#minutes_about_sun_set").show();
-    $("#exec_for_sun_set").show();
-  } else if ("moon_rise" === val) {
-    $("#about_sun_observation_day").hide();
-    $("#about_moon_observation_day").show();
-    $("#minutes_about_moon_rise").show();
-    $("#minutes_about_moon_set").hide();
-    $("#exec_for_moon_rise").show();
-  } else if ("moon_set" === val) {
-    $("#about_sun_observation_day").hide();
-    $("#about_moon_observation_day").show();
-    $("#about_sun").hide();
-    $("#about_moon").show();
-    $("#minutes_about_moon_rise").hide();
-    $("#minutes_about_moon_set").show();
-    $("#exec_for_moon_set").show();
-  }
-}
 //==========================================================
 // フォームに対象の位置を設定する。
 export function setTargetPseudoLatLng(ll: L.LatLng) {

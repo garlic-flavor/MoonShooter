@@ -3,26 +3,20 @@
  */
 html,
 body {
-  touch-action: manipulation;
-  overflow-x: hidden;
+  touch-action: manipulation; /* ダブルタップによる拡大抑制 */
+  overflow-x: hidden; /* 横スクロール抑制 */
 }
 body {
-  position: relative;
+  position: relative; /* 横スクロール抑制 */
 }
-button {
-  font-size: 20pt;
-}
-input {
-  font-size: 20pt;
-}
-input[type="text"] {
-  width: 5em;
-}
-input[type="number"] {
-  width: 3em;
-}
-select {
-  font-size: 20pt;
+
+/* テキスト選択不可にする */
+* {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 /*********************************************************************
@@ -60,22 +54,76 @@ select {
 /**
  * 観測対象ラジオボタン
  */
-#main_form input[type="radio"][name="target_type"] {
+/**
+ * タブタイトル
+ */
+#target_mode > input[type="radio"][name="target_type"] {
   appearance: none;
 }
-#main_form input[type="radio"][name="target_type"] ~ label {
+#target_mode > input[type="radio"][name="target_type"] ~ label {
   display: inline-block;
 }
-#main_form input[type="radio"][name="target_type"]:checked + label {
+#target_mode > input[type="radio"][name="target_type"]:checked + label {
   border-bottom: 3px solid blue;
 }
 
+/* 太陽モードの場合は月のフィールドを隠す。 */
+#target_mode > input#sun_rise:checked ~ #about_moon_observation_day,
+#target_mode > input#sun_set:checked ~ #about_moon_observation_day {
+  display: none;
+}
+/* 日の出の時は日の入りのフィールドを隠す。 */
+#target_mode
+  > input#sun_rise:checked
+  ~ #about_sun_observation_day
+  > #minutes_about_sun_set {
+  display: none;
+}
+/* 日の入りの時は日の出のフィールドを隠す。 */
+#target_mode
+  > input#sun_set:checked
+  ~ #about_sun_observation_day
+  > #minutes_about_sun_rise {
+  display: none;
+}
+
+/* 月モードの時は太陽のフィールドを隠す。*/
+#target_mode > input#moon_rise:checked ~ #about_sun_observation_day,
+#target_mode > input#moon_set:checked ~ #about_sun_observation_day {
+  display: none;
+}
+/* 月の出の時は月の入りのフィールドを隠す。*/
+#target_mode
+  > input#moon_rise:checked
+  ~ #about_moon_observation_day
+  > #minutes_about_moon_set {
+  display: none;
+}
+/* 月の入りの時は月の出のフィールドを隠す。*/
+#target_mode
+  > input#moon_set:checked
+  ~ #about_moon_observation_day
+  > #minutes_about_moon_rise {
+  display: none;
+}
+
+/* 情報部分は選択可能にする。*/
+#sun_info *,
+#moon_info * {
+  -webkit-touch-callout: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+/*
 #moon_observation_day {
   width: 7em;
 }
 #sun_observation_day {
   width: 7em;
 }
+*/
 #submit_button_container {
   text-align: center;
   margin-top: 1lh;

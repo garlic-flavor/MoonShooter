@@ -15,9 +15,6 @@ $(document).ready(() => {
     // ダイアルコントロールの設定
     makeDial(".dial");
     //----------------------------------------------------------
-    // 観測対象の設定
-    $("input[name='target_type']").on("change", D.targetTypeOnChange);
-    //----------------------------------------------------------
     // 対象の見かけの位置を地図から選ぶ
     $("#set_target_pseudo_latlng_from_map").on("click", () => {
         try {
@@ -79,7 +76,7 @@ $(document).ready(() => {
     // フォーム画面 実行ボタンの処理
     //----------------------------------------------------------
     // 太陽に関して
-    async function exec_for_sun() {
+    async function exec_for_sun(mode) {
         try {
             // フォームの値の読み取り
             const ll = D.getTargetPseudoLatLng();
@@ -92,10 +89,9 @@ $(document).ready(() => {
             const tip_height = (await M.getHeight(ll)) + formData.target_pseudo_height;
             // 日の出、日の入りの情報の取得。
             const times = SunCalc.getSunTimes(the_day, ll.lat, ll.lng, ll.alt);
-            const type = $("input[name='target_type']:checked").val();
             // 調べる時刻の列挙
             const timing = [];
-            if (type === "sun_rise") {
+            if (mode === "sun_rise") {
                 // 日の出以前は1分毎に調べる。
                 for (let t = formData.minutes_before_sun_rise; 0 < t; t--) {
                     timing.push(new Date(times.sunriseStart.ts - t * 60 * 1000));
@@ -112,7 +108,7 @@ $(document).ready(() => {
                     timing.push(new Date(times.sunriseStart.ts + t * 60 * 1000));
                 }
             }
-            else if (type === "sun_set") {
+            else if (mode === "sun_set") {
                 // 日の入り以降は1分毎に調べる。
                 for (let t = formData.minutes_after_sun_set; 0 < t; t--) {
                     timing.push(new Date(times.sunsetEnd.ts + t * 60 * 1000));
@@ -130,7 +126,7 @@ $(document).ready(() => {
                 }
             }
             else {
-                throw `${type} is wrong`;
+                throw `${mode} is wrong`;
             }
             // 結果データを格納する。
             const line = [];
@@ -167,15 +163,9 @@ $(document).ready(() => {
             D.showForms();
         }
     }
-    //------------------------------------------------
-    // 日の出
-    $("#exec_for_sun_rise").on("click", exec_for_sun);
-    //------------------------------------------------
-    // 日の入り
-    $("#exec_for_sun_set").on("click", exec_for_sun);
     //----------------------------------------------------------
     // 月に関して
-    async function exec_for_moon() {
+    async function exec_for_moon(mode) {
         try {
             // フォームの値の読み取り
             const ll = D.getTargetPseudoLatLng();
@@ -188,10 +178,9 @@ $(document).ready(() => {
             const tip_height = (await M.getHeight(ll)) + formData.target_pseudo_height;
             // 月の出、月の入りの情報の取得。
             const times = SunCalc.getMoonTimes(the_day, ll.lat, ll.lng, false);
-            const type = $("input[name='target_type']:checked").val();
             // 調べる時刻の列挙
             const timing = [];
-            if (type === "moon_rise") {
+            if (mode === "moon_rise") {
                 // 月の出以前は1分毎に調べる。
                 for (let t = formData.minutes_before_moon_rise; 0 < t; t--) {
                     timing.push(new Date(Number(times.rise) - t * 60 * 1000));
@@ -208,7 +197,7 @@ $(document).ready(() => {
                     timing.push(new Date(Number(times.rise) + t * 60 * 1000));
                 }
             }
-            else if (type === "moon_set") {
+            else if (mode === "moon_set") {
                 // 月の入り以降は1分毎に調べる。
                 for (let t = formData.minutes_after_moon_set; 0 < t; t--) {
                     timing.push(new Date(Number(times.set) + t * 60 * 1000));
@@ -226,7 +215,7 @@ $(document).ready(() => {
                 }
             }
             else {
-                throw `${type} is wrong`;
+                throw `${mode} is wrong`;
             }
             // 結果データを格納する。
             const line = [];
@@ -267,11 +256,21 @@ $(document).ready(() => {
         }
     }
     //------------------------------------------------
-    // 月の出
-    $("#exec_for_moon_rise").on("click", exec_for_moon);
-    //------------------------------------------------
-    // 月の入り
-    $("#exec_for_moon_set").on("click", exec_for_moon);
+    // 実行
+    $("#exec").on("click", () => {
+        const mode = $("input[name='target_type']:checked").val();
+        switch (mode) {
+            case "sun_rise":
+            case "sun_set":
+                exec_for_sun(mode);
+                break;
+            case "moon_rise":
+            case "moon_set":
+                exec_for_moon(mode);
+                break;
+            default:
+        }
+    });
     //////////////////////////////////////////////////////////////////////
     // 読み込みボタンの処理
     $("#import_data").on("click", () => {

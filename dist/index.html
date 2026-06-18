@@ -40,7 +40,7 @@
         <!----------------------------------------------------------
         -- 観察天体
         -->
-        <fieldset>
+        <fieldset id="target_mode">
           <legend>観測対象</legend>
           <input type="radio" id="sun_rise" value="sun_rise"
             name="target_type">
@@ -59,11 +59,11 @@
           <label for="moon_set">月の入り</label>
 
           <hr>
-
+          観測日
           <!------------------------------------------------
           -- 太陽の観察日
           -->
-          <div id="about_sun_observation_day" style="display:none">
+          <div id="about_sun_observation_day">
             <input type="date" id="sun_observation_day"><br>
             <dl id="sun_info">
               <dt>日の出</dt><dd id="sun_info_rise"></dd>
@@ -91,13 +91,11 @@
               <label for="minutes_after_sun_set">分後まで</label>
             </div>
           </div> <!-- 太陽の観測日 -->
-  
-  
+
           <!------------------------------------------------
           -- 月の観察日
           -->
           <div id="about_moon_observation_day">
-            <legend>観測日</legend>
             <button type="button" id="get_prev_fullmoon">前の満月</button>
             <input type="date" id="moon_observation_day">
             <button type="button" id="get_next_fullmoon">次の満月</button>
@@ -118,7 +116,7 @@
               <label for="minutes_after_moon_rise">分後まで</label>
             </div>
             <!-- 月の入り -->
-            <div id="minutes_about_moon_set" style="display:none">
+            <div id="minutes_about_moon_set">
               <label for="minutes_before_moon_set">月の入りの</label><br>
               <div class="dial" value="60" minValue="10" maxValue="300" notch="10" notchWidth="10" scaleInterval="10" indicatorInterval="60" for="minutes_before_moon_set"></div>
               <input type="number" id="minutes_before_moon_set" value="60">
@@ -170,10 +168,13 @@
         == 実行
         -->
         <div id="submit_button_container">
+          <button type="button" id="exec">実行</button>
+          <!--
           <button type="button" id="exec_for_sun_rise" style="display:none">実行</button>
           <button type="button" id="exec_for_sun_set" style="display:none">実行</button>
           <button type="button" id="exec_for_moon_rise">実行</button>
           <button type="button" id="exec_for_moon_set" style="display:none">実行</button>
+          -->
         </div>
         <!----------------------------------------------------------
         -- 読み込み
