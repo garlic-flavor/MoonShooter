@@ -2,39 +2,15 @@ import { $ } from "jquery";
 
 function _makeDial(elem: HTMLElement) {
   const $e = $(elem);
+  //----------------------------------------------------------
   // 全体
-  $e.css({
-    display: "inline-block",
-    overflow: "hidden",
-    background: "linear-gradient(to right, gray, lightgray, gray)",
-    "touch-action": "manipulation",
-    cursor: "pointer",
-  })
-    .append(
-      // メモリの上側のセンター表示
-      $("<div>").css({
-        position: "relative",
-        display: "block",
-        height: "20%",
-        "background-color": "red",
-        "border-top": "1px solid dimgray",
-        "border-left": "2px solid dimgray",
-        "border-right": "2px solid white",
-        left: "50%",
-        width: "1",
-      }),
-    )
-    .append(
-      // メモリ上下の境界
-      $("<div>").css({
-        position: "relative",
-        display: "block",
-        height: "0px",
-        width: "100%",
-        "border-top": "1px solid dimgray",
-        "border-bottom": "1px solid white",
-      }),
-    );
+  $e.addClass("dial_container")
+    // メモリの上側のセンター表示
+    .append($("<div>").addClass("center_indicator"))
+    // メモリ上下の境界
+    .append($("<div>").addClass("middle_separator"));
+
+  //----------------------------------------------------------
   // 諸元初期値の設定
   const center = ($e.width() as number) / 2;
   let minValue = Number($e.attr("minValue"));
@@ -66,16 +42,15 @@ function _makeDial(elem: HTMLElement) {
     indicatorInterval = scaleInterval * 5;
   }
 
-  // メモリダイアルのコンテナ
+  //----------------------------------------------------------
+  // メモリのコンテナ
   const $dial = $("<div>")
-    .css({
-      position: "relative",
-      display: "block",
-      height: "70%",
-      width: ((maxValue - minValue) / notch) * notchWidth,
-    })
+    .addClass("scale_container")
+    .css("width", ((maxValue - minValue) / notch) * notchWidth)
     .appendTo($e);
 
+  //------------------------------------------------
+  // メモリの位置合わせ
   // valueを範囲内に収める。
   function getJustified(v: number) {
     if (!(minValue < v)) {
@@ -100,42 +75,28 @@ function _makeDial(elem: HTMLElement) {
     $e.val(newV);
     $dial.css("left", `${valueToLeft(newV)}px`);
   }
+
+  //----------------------------------------------------------
   // 初期位置の設定
   setValueTo$dial(defaultValue);
-  // メモリ
+
+  //----------------------------------------------------------
+  // メモリ描画
   function drawScale(v: number, indicator?: string) {
-    let height = 30;
     const left = center - valueToLeft(v);
     // メモリの数値表示
     if (indicator) {
-      // メモリを少し長く
-      height += 10;
       // 数値
       $("<div>")
-        .css({
-          position: "absolute",
-          display: "block",
-          top: `${height}%`,
-          width: "0px",
-          left: `${left}px`,
-          "margin-left": `${indicator.length * -0.4}ch`,
-          "text-shadow": "2px 1px white",
-          "user-select": "none",
-        })
+        .addClass("indicator")
+        .css("left", left)
         .text(v)
         .appendTo($dial);
     }
     // 目盛
     $("<div>")
-      .css({
-        position: "absolute",
-        display: "inline-block",
-        top: "0px",
-        left: `${left}px`,
-        height: `${height}%`,
-        "border-left": "2px solid dimgray",
-        "border-right": "2px solid white",
-      })
+      .addClass(indicator ? "scale-long" : "scale-short")
+      .css("left", left)
       .appendTo($dial);
   }
   drawScale(minValue, minValue.toString());
@@ -152,6 +113,7 @@ function _makeDial(elem: HTMLElement) {
     }
   }
 
+  //----------------------------------------------------------
   // スピナーとの連携
   const $spinner = $(`#${$e.attr("for") as string}`).on("change", (e) => {
     const val = getJustified(Number((e.target as HTMLInputElement).value));
@@ -159,18 +121,38 @@ function _makeDial(elem: HTMLElement) {
     setValueTo$dial(val);
   });
 
+  //----------------------------------------------------------
+  // イベント処理
+  let click_count = 0;
+  let when_down = 0;
+  const click_interval = 200;
+  let scrollY = 0;
+  //------------------------------------------------
   // ドラッグ処理
   // ドラッグ開始
   $e.on("pointerdown", (e) => {
+    // スクロールを止める。
+    scrollY = window.scrollY;
+    $("html, body").css({
+      "overscroll-behavior": "none",
+      position: "fixed",
+      top: `-${window.scrollY}px`,
+    });
     const $tgt = $(e.target);
     // 開始位置
-    const startX = parseInt($dial.css("left"), 10);
+    let prevLeft = parseInt($dial.css("left"), 10);
+    let prevX = Number(e.pageX);
+    const prevY = Number(e.pageY) - scrollY;
+    let delta = 0;
     // ドラッグ中
     $tgt.on("pointermove", (ee) => {
+      const ratio = Math.max(1, Math.abs(Number(ee.pageY) - prevY) / 50);
       // 新しい値
-      const newV = leftToValue(
-        startX + (ee.clientX as number) - (e.clientX as number),
-      );
+      const rawValue = delta + prevLeft + (Number(ee.pageX) - prevX) / ratio;
+      const newV = leftToValue(rawValue);
+      prevLeft = valueToLeft(newV);
+      delta = rawValue - prevLeft;
+      prevX = Number(ee.pageX);
       // 新しい位置
       setValueTo$dial(newV);
       // onchange イベント呼び出し
@@ -179,31 +161,44 @@ function _makeDial(elem: HTMLElement) {
       $spinner.val(newV);
       ee.preventDefault();
     });
+    when_down = Date.now();
     e.preventDefault();
     e.target.setPointerCapture(e.pointerId as number);
-    // ドラッグ終了
   })
+    // ドラッグ終了
     .on("pointerup", (e) => {
       $(e.target).off("pointermove");
       e.target.releasePointerCapture(e.pointerId as number);
+      $("html, body").css({
+        "overscroll-behavior": "auto",
+        position: "relative",
+        top: "0px",
+      });
+      window.scrollTo(0, scrollY);
+
+      if (Date.now() - when_down < click_interval) {
+        if (!click_count) {
+          // シングルクリック
+          click_count++;
+          setTimeout(() => {
+            click_count = 0;
+          }, click_interval * 2);
+        } else {
+          // ダブルクリック
+          setValueTo$dial(defaultValue);
+          $spinner.val(defaultValue);
+        }
+      }
       e.preventDefault();
-      // スクリプトからの値の設定
     })
+    // スクリプトからの値の設定
     .on("input", (_, val) => {
       setValueTo$dial(val);
       $spinner.val(val);
-      // ダブルクリック
-    })
-    .on("dblclick", (e) => {
-      setValueTo$dial(defaultValue);
-      $spinner.val(defaultValue);
-      e.preventDefault();
     });
 }
 
-export default function makeDial(
-  elem: any /*string | HTMLElement | JQuery<HTMLElement>*/,
-) {
+export default function makeDial(elem: any) {
   const $elems = $(elem);
   $elems.each((_, e) => _makeDial(e));
   return $elems;

@@ -38,11 +38,11 @@ $(document).ready(() => {
   });
   //----------------------------------------------------------
   // 対象の位置をクリップボードから読み込む。
-  $("#target_pseudo_latlng").on("paste", async (e) => {
-    e.preventDefault();
-    const txt = await navigator.clipboard.readText();
+  $("#target_pseudo_latlng").on("paste", (e: any) => {
+    const txt = e.originalEvent.clipboardData?.getData("text") as string;
     $(e.target).val(txt);
     $("#set_target_pseudo_latlng_from_map").trigger("click");
+    e.preventDefault();
   });
 
   //----------------------------------------------------------

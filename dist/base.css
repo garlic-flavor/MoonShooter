@@ -6,16 +6,16 @@
   --font-size-BIG: 20pt;
   --font-size-normal: 14pt;
 }
+
 html,
 body {
-  touch-action: manipulation; /* ダブルタップによる拡大抑制 */
-  overflow-x: hidden; /* 横スクロール抑制 */
-}
-body {
-  position: relative; /* 横スクロール抑制 */
+  /* touch-action: manipulation; /* ダブルタップによる拡大抑制 */
+  /* 横スクロール抑制 */
+  overflow-x: hidden;
 }
 
 /* テキスト選択不可にする */
+/*
 * {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -23,6 +23,7 @@ body {
   -ms-user-select: none;
   user-select: none;
 }
+*/
 
 /*********************************************************************
  * JavaScript 注意書き

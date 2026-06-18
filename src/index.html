@@ -6,6 +6,7 @@
     <title>Moon Shooter</title>
     <link rel="stylesheet" href="./scripts/leaflet/leaflet.css">
     <link rel="stylesheet" href="./base.css">
+    <link rel="stylesheet" href="./dial.css">
     <script type="importmap">
       { "imports": {
         "jquery": "./scripts/jquery/jquery.module.js",
@@ -96,9 +97,9 @@
           -- 月の観察日
           -->
           <div id="about_moon_observation_day">
-            <button type="button" id="get_prev_fullmoon">昨満月</button>
-            <input type="date" id="moon_observation_day">
-            <button type="button" id="get_next_fullmoon">翌満月</button>
+            <input type="date" id="moon_observation_day"><br>
+            <button type="button" id="get_prev_fullmoon">前の満月</button>
+            <button type="button" id="get_next_fullmoon">次の満月</button>
             <dl id="moon_info">
               <dt>満ち欠け</dt><dd id="moon_info_fraction"></dd>
               <dt>月の出</dt><dd id="moon_info_rise"></dd>
@@ -165,12 +166,6 @@
         -->
         <div id="submit_button_container">
           <button type="button" id="exec">実行</button>
-          <!--
-          <button type="button" id="exec_for_sun_rise" style="display:none">実行</button>
-          <button type="button" id="exec_for_sun_set" style="display:none">実行</button>
-          <button type="button" id="exec_for_moon_rise">実行</button>
-          <button type="button" id="exec_for_moon_set" style="display:none">実行</button>
-          -->
         </div>
         <!----------------------------------------------------------
         -- 読み込み
@@ -218,8 +213,8 @@
           -- 結果表示画面
           -->
           <div id="result_ui">
+            <input type="text" id="exported_data"><br>
             <button type="button" id="result_back">戻る</button>
-            <input type="text" id="exported_data">
             <button type="button" id="openGoogleMap">🗺️</button><br>
             <select id="timing_list"> </select><br>
             <div id="info"></div>

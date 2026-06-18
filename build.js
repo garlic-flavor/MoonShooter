@@ -98,6 +98,7 @@ function build(arg) {
         "index",
         "base.css",
         "usage.css",
+        "dial.css",
         "page",
         "tsc",
       ].forEach((item) => {
@@ -171,6 +172,9 @@ function build(arg) {
       break;
     case "usage.css":
       cp("./src/usage.css", "./dist/usage.css");
+      break;
+    case "dial.css":
+      cp("./src/dial.css", "./dist/dial.css");
       break;
     case "license":
       cp("./LICENSE", "./dist/LICENSE.txt");

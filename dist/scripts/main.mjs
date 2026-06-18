@@ -34,11 +34,11 @@ $(document).ready(() => {
     });
     //----------------------------------------------------------
     // 対象の位置をクリップボードから読み込む。
-    $("#target_pseudo_latlng").on("paste", async (e) => {
-        e.preventDefault();
-        const txt = await navigator.clipboard.readText();
+    $("#target_pseudo_latlng").on("paste", (e) => {
+        const txt = e.originalEvent.clipboardData?.getData("text");
         $(e.target).val(txt);
         $("#set_target_pseudo_latlng_from_map").trigger("click");
+        e.preventDefault();
     });
     //----------------------------------------------------------
     // 履歴トグルボタン
