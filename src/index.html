@@ -78,7 +78,7 @@
   
               <div class="dial" value="60" minValue="10" maxValue="300" notch="10" notchWidth="10" scaleInterval="10" indicatorInterval="60" for="minutes_after_sun_rise"></div>
               <input type="number" id="minutes_after_sun_rise" value="60">
-              <label for="minutes_after_sun_rise">分後まで</label>
+              <label for="minutes_after_sun_rise">分後</label>
             </div>
             <!-- 日の入り -->
             <div id="minutes_about_sun_set">
@@ -88,7 +88,7 @@
               <label for="minutes_before_sun_set">分前</label> 〜<br>
               <div class="dial" value="10" minValue="0" maxValue="60" notch="1" notchWidth="5" scaleInterval="1" indicatorInterval="10" for="minutes_after_sun_set"></div>
               <input type="number" id="minutes_after_sun_set" value="10">
-              <label for="minutes_after_sun_set">分後まで</label>
+              <label for="minutes_after_sun_set">分後</label>
             </div>
           </div> <!-- 太陽の観測日 -->
 
@@ -96,9 +96,9 @@
           -- 月の観察日
           -->
           <div id="about_moon_observation_day">
-            <button type="button" id="get_prev_fullmoon">前の満月</button>
+            <button type="button" id="get_prev_fullmoon">昨満月</button>
             <input type="date" id="moon_observation_day">
-            <button type="button" id="get_next_fullmoon">次の満月</button>
+            <button type="button" id="get_next_fullmoon">翌満月</button>
             <dl id="moon_info">
               <dt>満ち欠け</dt><dd id="moon_info_fraction"></dd>
               <dt>月の出</dt><dd id="moon_info_rise"></dd>
@@ -109,11 +109,11 @@
               <label for="minutes_before_moon_rise">月の出の</label><br>
               <div class="dial" value="10" minValue="0" maxValue="60" notch="1" notchWidth="5" scaleInterval="1" indicatorInterval="10" for="minutes_before_moon_rise"></div>
               <input type="number" id="minutes_before_moon_rise" value="10">
-              <label for="minutes_before_moon_rise">分前</label> 〜<br>
+              <label for="minutes_before_moon_rise">分前</label> 〜
   
               <div class="dial" value="60" minValue="10" maxValue="300" notch="10" notchWidth="10" scaleInterval="10" indicatorInterval="60" for="minutes_after_moon_rise"></div>
               <input type="number" id="minutes_after_moon_rise" value="60">
-              <label for="minutes_after_moon_rise">分後まで</label>
+              <label for="minutes_after_moon_rise">分後</label>
             </div>
             <!-- 月の入り -->
             <div id="minutes_about_moon_set">
@@ -124,7 +124,7 @@
   
               <div class="dial" value="10" minValue="0" maxValue="60" notch="1" notchWidth="5" scaleInterval="1" indicatorInterval="10" for="minutes_after_moon_set"></div>
               <input type="number" id="minutes_after_moon_set" value="10">
-              <label for="minutes_after_moon_set">分後まで</label>
+              <label for="minutes_after_moon_set">分後</label>
             </div>
           </div><!-- 月の観測日 -->
 
@@ -137,14 +137,10 @@
           <legend>対象の見かけの位置</legend>
           <label for="target_pseudo_latlng">緯度,経度</label><br>
           <input id="target_pseudo_latlng" type="text" value="34.83944988880835,134.69393849372867">
-          <!--
-          <button type="button" id="set_target_pseudo_latlng_from_clipboard">クリップボードから読み込み</button><br>
-          -->
           <button type="button" id="set_target_pseudo_latlng_from_map">地図で指定</button>
-    <!-- //const DefaultCenter = L.latLng (36.104611, 140.084556); -->
           <br>
           <label for="target_pseudo_height">対象の見かけの高さ</label><br>
-          <div class="dial" value="30" minValue="0" maxValue="1000" notch="1" notchWidth="1" scaleInterval="10" indicatorInterval="50" for="target_pseudo_height" style="width: 15ch; height: 2lh;"></div>
+          <div class="dial" value="30" minValue="0" maxValue="1000" notch="1" notchWidth="1" scaleInterval="10" indicatorInterval="50" for="target_pseudo_height"></div>
           <input type="number" id="target_pseudo_height" value="30">
           <label for="target_pseudo_height">m</label><br>
         </fieldset><!-- legend="対象の見かけの位置" -->
@@ -155,12 +151,12 @@
         <fieldset>
           <legend>観測者</legend>
           <label for="camera_height">観測者の高さ</label><br>
-          <div class="dial" value="1.5" minValue="0" maxValue="500" notch="0.1" notchWidth="1" scaleInterval="1" indicatorInterval="5" for="camera_height" style="width: 15ch; height: 2lh;"></div>
+          <div class="dial" value="1.5" minValue="0" maxValue="500" notch="0.1" notchWidth="1" scaleInterval="1" indicatorInterval="5" for="camera_height"></div>
           <input type="number" id="camera_height" value="1.5">
           <label for="camera_height">m</label><br>
   
           <label for="far_distance">調べる距離 〜 </label><br>
-          <div class="dial" value="10" minValue="1" maxValue="200" notch="1" notchWidth="1" scaleInterval="10" indicatorInterval="50" for="far_distance" style="width: 15ch; height: 2lh;"></div>
+          <div class="dial" value="10" minValue="1" maxValue="200" notch="1" notchWidth="1" scaleInterval="10" indicatorInterval="50" for="far_distance"></div>
           <input type="number" id="far_distance" value="10">
           <label for="far_distance">km</label><br>
         </fieldset><!-- legend="観測者" -->
@@ -187,10 +183,10 @@
         </button>
         <fieldset id="history_field" style="display:none">
           <legend>読み込み</legend>
-          <label for="history">履歴から</label>
+          <label for="history">履歴から</label><br>
           <select id="history"> </select>
           <br>
-          <label for="data_to_import"> JSONから</label>
+          <label for="data_to_import"> JSONから</label><br>
           <input type="text" id="data_to_import" value="">
           <br>
           <button type="button" id="import_data">読み込む</button>
@@ -214,7 +210,7 @@
           -- 地図から対象の位置を選ぶ
           -->
           <div id="target_pseudo_latlng_from_map_ui">
-            対象の見かけの位置にピンを設置してください。
+            対象の見かけの位置にピンを設置してください。<br>
             <button type="button" id="target_pseudo_latlng_select">決定</button>
             <div id="target_pseudo_latlng_display"></div>
           </div>

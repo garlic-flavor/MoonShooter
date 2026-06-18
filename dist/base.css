@@ -1,6 +1,11 @@
 /*********************************************************************
  * 全体
  */
+:root {
+  --font-size-big: 18pt;
+  --font-size-BIG: 20pt;
+  --font-size-normal: 14pt;
+}
 html,
 body {
   touch-action: manipulation; /* ダブルタップによる拡大抑制 */
@@ -40,21 +45,60 @@ body {
   margin-top: 1lh;
 }
 
-#main_form dl {
-  display: grid;
-  grid-template-columns: max-content auto;
+/**
+ * 日付選択
+ */
+#sun_observation_day,
+#moon_observation_day,
+#get_prev_fullmoon,
+#get_next_fullmoon {
+  font-size: var(--font-size-big);
 }
-#main_form dt {
-  grid-column-start: 1;
+/**
+ * 場所選択
+ */
+#target_pseudo_latlng {
+  font-size: var(--font-size-big);
+  width: 8ch;
 }
-#main_form dd {
-  grid-column-start: 2;
+#set_target_pseudo_latlng_from_map {
+  font-size: var(--font-size-big);
 }
 
 /**
+ * 実行ボタン
+ */
+#submit_button_container {
+  text-align: center;
+  margin-top: 1lh;
+  margin-bottom: 1lh;
+}
+#submit_button_container > button {
+  width: 95vw;
+  height: 1.5lh;
+  font-size: var(--font-size-BIG);
+}
+
+/**
+ * 履歴
+ */
+#show_history_field_button,
+#hide_history_field_button {
+  font-size: var(--font-size-normal);
+}
+
+#history {
+  width: 90vw;
+}
+
+#import_data {
+  font-size: var(--font-size-normal);
+}
+
+/************************************************************
  * 観測対象ラジオボタン
  */
-/**
+/**************************************************
  * タブタイトル
  */
 #target_mode > input[type="radio"][name="target_type"] {
@@ -66,7 +110,9 @@ body {
 #target_mode > input[type="radio"][name="target_type"]:checked + label {
   border-bottom: 3px solid blue;
 }
-
+/**************************************************
+ * タブ中身
+ */
 /* 太陽モードの場合は月のフィールドを隠す。 */
 #target_mode > input#sun_rise:checked ~ #about_moon_observation_day,
 #target_mode > input#sun_set:checked ~ #about_moon_observation_day {
@@ -107,6 +153,20 @@ body {
   display: none;
 }
 
+/************************************************************
+ * 太陽、月の情報テーブル
+ */
+#main_form dl {
+  display: grid;
+  grid-template-columns: max-content auto;
+}
+#main_form dt {
+  grid-column-start: 1;
+}
+#main_form dd {
+  grid-column-start: 2;
+}
+
 /* 情報部分は選択可能にする。*/
 #sun_info *,
 #moon_info * {
@@ -116,29 +176,26 @@ body {
   -ms-user-select: text;
   user-select: text;
 }
-/*
-#moon_observation_day {
-  width: 7em;
-}
-#sun_observation_day {
-  width: 7em;
-}
-*/
-#submit_button_container {
-  text-align: center;
-  margin-top: 1lh;
-  margin-bottom: 1lh;
-}
-#submit_button_container > button {
-  width: 100%;
-}
 
-/**
+/************************************************************
  * ダイアル
  */
 .dial {
-  width: 15ch;
+  width: 45vw;
   height: 2lh;
+  margin-bottom: -0.5lh;
+}
+
+#target_mode .dial + input {
+  margin-bottom: 0.5lh;
+  font-size: var(--font-size-big);
+  width: 4ch;
+}
+
+:not(#target_mode) .dial + input {
+  margin-bottom: 0.5lh;
+  font-size: var(--font-size-big);
+  width: 5ch;
 }
 
 /*********************************************************************
@@ -157,6 +214,19 @@ body {
 #map_container {
   grid-row: 2;
   border: 1px solid black;
+}
+
+#map_grid button {
+  font-size: var(--font-size-BIG);
+  padding-left: 2ch;
+  padding-right: 2ch;
+}
+
+#timing_list {
+  font-size: var(--font-size-BIG);
+  width: 90vw;
+  margin-top: 0.5lh;
+  margin-bottom: 0.5lh;
 }
 
 /*********************************************************************

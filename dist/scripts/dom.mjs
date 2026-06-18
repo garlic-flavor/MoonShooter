@@ -35,14 +35,21 @@ export function updateHistory(data) {
 // 3. 地図
 // の3つに分けられる。これらを切り替える。
 //==========================================================
+let formScroll = 0;
 export function showForms() {
     $("#progress_ui").hide();
     $("#map_grid").hide();
     $("#main_form").show();
+    if (formScroll) {
+        window.scrollTo(0, formScroll);
+    }
 }
 //==========================================================
 export function showProgress() {
-    window.scrollTo(0, 0);
+    if (window.scrollY) {
+        formScroll = window.scrollY;
+        window.scrollTo(0, 0);
+    }
     $("#map_grid").hide();
     $("#main_form").hide();
     $("#progress_ui").show();
@@ -50,7 +57,10 @@ export function showProgress() {
 }
 //==========================================================
 export function showMap() {
-    window.scrollTo(0, 0);
+    if (window.scrollY) {
+        formScroll = window.scrollY;
+        window.scrollTo(0, 0);
+    }
     $("#main_form").hide();
     $("#progress_ui").hide();
     $("#map_grid_ui").children().hide();
