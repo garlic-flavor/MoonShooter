@@ -114,6 +114,7 @@ function build(arg) {
         "index",
         "base.css",
         "usage.css",
+        "dial.css",
         "page",
         "tsc",
       ].forEach((item) => {

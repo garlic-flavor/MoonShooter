@@ -1,0 +1,88 @@
+:root {
+  --dark-color: dimgray;
+  --light-color: white;
+  --point-color: red;
+  --back-gradient: linear-gradient(to right, gray, lightgray, gray);
+}
+/**
+ * 全体
+ */
+.dial_container {
+  display: inline-block;
+  overflow: hidden;
+  background: var(--back-gradient);
+  touch-action: manipulation;
+  cursor: pointer;
+}
+/**
+ * メモリの上側のセンター表示
+ */
+.dial_container > .center_indicator {
+  position: relative;
+  display: block;
+  height: 20%;
+  background-color: var(--point-color);
+  border-top: 1px solid var(--dark-color);
+  border-left: 2px solid var(--dark-color);
+  border-right: 2px solid var(--light-color);
+  left: 50%;
+  width: 1px;
+}
+
+/**
+ * メモリ上下の境界
+ */
+.dial_container > .middle_separator {
+  position: relative;
+  display: block;
+  height: 0px;
+  width: 100%;
+  border-top: 1px solid var(--dark-color);
+  border-bottom: 1px solid var(--light-color);
+}
+
+/**
+ * メモリダイアルのコンテナ
+ */
+.dial_container > .scale_container {
+  position: relative;
+  display: block;
+  height: 70%;
+}
+
+/**
+ * メモリの数値表示
+ */
+.dial_container > .scale_container > .indicator {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  top: 40%;
+  width: 0px;
+  text-shadow: 2px 1px var(--light-color);
+  user-select: none;
+}
+
+/**
+ * 長いメモリ
+ */
+.dial_container > .scale_container > .scale-long {
+  position: absolute;
+  display: inline-block;
+  top: 0px;
+  height: 40%;
+  border-left: 2px solid var(--dark-color);
+  border-right: 2px solid var(--light-color);
+}
+
+/**
+ * 短いメモリ
+ */
+.dial_container > .scale_container > .scale-short {
+  position: absolute;
+  display: inline-block;
+  top: 0px;
+  height: 30%;
+  border-left: 2px solid var(--dark-color);
+  border-right: 2px solid var(--light-color);
+}
