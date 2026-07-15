@@ -16,9 +16,9 @@ $(document).ready(() => {
     makeDial(".dial");
     //----------------------------------------------------------
     // 対象の見かけの位置を地図から選ぶ
-    $("#set_target_pseudo_latlng_from_map").on("click", () => {
+    $("#set_target_pseudo_latlng_from_map").on("click", async () => {
         try {
-            const ll = D.getTargetPseudoLatLng();
+            const ll = await D.getTargetPseudoLatLng();
             D.showMapToSetTargetPseudoLatLng();
             M.startToSetTargetPseudoLatLng(ll);
         }
@@ -34,11 +34,15 @@ $(document).ready(() => {
     });
     //----------------------------------------------------------
     // 対象の位置をクリップボードから読み込む。
-    $("#target_pseudo_latlng").on("paste", (e) => {
+    $("#target_pseudo_latlng")
+        .on("paste", (e) => {
         const txt = e.originalEvent.clipboardData?.getData("text");
         $(e.target).val(txt);
         $("#set_target_pseudo_latlng_from_map").trigger("click");
         e.preventDefault();
+    })
+        .on("click", function () {
+        this.select();
     });
     //----------------------------------------------------------
     // 履歴トグルボタン
@@ -79,7 +83,7 @@ $(document).ready(() => {
     async function exec_for_sun(mode) {
         try {
             // フォームの値の読み取り
-            const ll = D.getTargetPseudoLatLng();
+            const ll = await D.getTargetPseudoLatLng();
             // プログレス画面の表示
             D.showProgress();
             // フォームデータの収集
@@ -168,7 +172,7 @@ $(document).ready(() => {
     async function exec_for_moon(mode) {
         try {
             // フォームの値の読み取り
-            const ll = D.getTargetPseudoLatLng();
+            const ll = await D.getTargetPseudoLatLng();
             // プログレス画面の表示
             D.showProgress();
             // フォームデータの収集

@@ -81,15 +81,69 @@ export function setTargetPseudoLatLng(ll: L.LatLng) {
 //==========================================================
 // フォームから対象の位置を得る。
 function getLatLng(str: string): L.LatLng | undefined {
+  // 緯度経度が指定された場合
+  // 34.1234, 135.1234
   const match =
-    /[^-+0-9]*([+-]?[0-9]+\.[0-9]*)[^-+0-9]*([+-]?[0-9]+\.[0-9]*)/.exec(str);
+    /[^-+0-9]*([+-]?[0-9]+\.[0-9]+)[^-+0-9]*([+-]?[0-9]+\.[0-9]+)/.exec(str);
   if (match) {
     return L.latLng(Number(match[1]), Number(match[2]));
   }
+
+  // 34°45'00.7"N 135°09'47.4"E
+  const m =
+    /([+-]?\d{1,2})°(\d{2})'([.0-9]{4})"N ([+-]?\d{1,3})°(\d{2})'([.0-9]{4})"E/.exec(
+      str,
+    );
+  if (m) {
+    const lat = Number(m[1]) + Number(m[2]) / 60.0 + Number(m[3]) / 3600.0;
+    const lng = Number(m[4]) + Number(m[5]) / 60.0 + Number(m[6]) / 3600.0;
+    return L.latLng(lat, lng);
+  }
+
   return undefined;
 }
-export function getTargetPseudoLatLng(): L.LatLng {
-  const ll = getLatLng($("#target_pseudo_latlng").val() as string);
+
+//--------------------------------------------------
+// 住所から緯度経度を検索する。
+// [東京大学空間情報科学研究センター](https://geocode.csis.u-tokyo.ac.jp)
+function searchLatLng(str: string): Promise<L.LatLng> {
+  return new Promise((response, reject) => {
+    const url = "https://geocode.csis.u-tokyo.ac.jp/cgi-bin/simple_geocode.cgi";
+    const req = new XMLHttpRequest();
+    req.addEventListener("load", function () {
+      const xml = this.responseXML;
+      if (!xml) {
+        return reject("住所の検索に失敗しました。");
+      }
+      const lat = Number(
+        xml.getElementsByTagName("latitude")[0]?.textContent ?? "",
+      );
+      const lng = Number(
+        xml.getElementsByTagName("longitude")[0]?.textContent ?? "",
+      );
+      if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
+        return response(L.latLng(lat, lng));
+      }
+      return reject("緯度経度を読み取ることができませんでした。");
+    });
+    req.addEventListener("error", () => {
+      reject("住所の検索に失敗しました。");
+    });
+    req.addEventListener("abort", () => {
+      reject("住所の検索は中断されました。");
+    });
+    req.open("GET", encodeURI(`${url}?addr=${str}`));
+    req.send();
+  });
+}
+//==========================================================
+// テキストボックスから対象の見かけの位置を得る。
+export async function getTargetPseudoLatLng(): Promise<L.LatLng> {
+  const str = $("#target_pseudo_latlng").val() as string;
+  if (!str) {
+    throw "対象の見かけの位置を入力してください。";
+  }
+  const ll = getLatLng(str) || (await searchLatLng(str));
   if (!ll) {
     throw "対象の見かけの位置が読み取れませんでした。";
   }
@@ -105,12 +159,12 @@ export function showMapToSetTargetPseudoLatLng() {
 
 //==========================================================
 // 太陽の観測日が変更された。
-export function updateSunTimes(e: Event) {
+export async function updateSunTimes(e: Event) {
   if (!e.target) {
     return;
   }
   const day = $(e.target).prop("valueAsDate");
-  const ll = getTargetPseudoLatLng();
+  const ll = await getTargetPseudoLatLng();
   if (!day || !ll) {
     ["rise", "set"].forEach((key) => {
       $(`#sun_info_${key}`).text("-");
@@ -124,12 +178,12 @@ export function updateSunTimes(e: Event) {
 
 //==========================================================
 // 月の情報の更新
-export function updateMoonTimes(e: Event) {
+export async function updateMoonTimes(e: Event) {
   if (!e.target) {
     return;
   }
   const day = $(e.target).prop("valueAsDate");
-  const ll = getTargetPseudoLatLng();
+  const ll = await getTargetPseudoLatLng();
   if (!day || !ll) {
     ["rise", "set", "fraction"].forEach((key) => {
       $(`#moon_info_${key}`).text("-");

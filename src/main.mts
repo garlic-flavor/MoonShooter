@@ -21,9 +21,9 @@ $(document).ready(() => {
 
   //----------------------------------------------------------
   // 対象の見かけの位置を地図から選ぶ
-  $("#set_target_pseudo_latlng_from_map").on("click", () => {
+  $("#set_target_pseudo_latlng_from_map").on("click", async () => {
     try {
-      const ll = D.getTargetPseudoLatLng();
+      const ll = await D.getTargetPseudoLatLng();
       D.showMapToSetTargetPseudoLatLng();
       M.startToSetTargetPseudoLatLng(ll);
     } catch (error) {
@@ -38,12 +38,16 @@ $(document).ready(() => {
   });
   //----------------------------------------------------------
   // 対象の位置をクリップボードから読み込む。
-  $("#target_pseudo_latlng").on("paste", (e: any) => {
-    const txt = e.originalEvent.clipboardData?.getData("text") as string;
-    $(e.target).val(txt);
-    $("#set_target_pseudo_latlng_from_map").trigger("click");
-    e.preventDefault();
-  });
+  $("#target_pseudo_latlng")
+    .on("paste", (e: any) => {
+      const txt = e.originalEvent.clipboardData?.getData("text") as string;
+      $(e.target).val(txt);
+      $("#set_target_pseudo_latlng_from_map").trigger("click");
+      e.preventDefault();
+    })
+    .on("click", function () {
+      (this as HTMLInputElement).select();
+    });
 
   //----------------------------------------------------------
   // 履歴トグルボタン
@@ -87,7 +91,7 @@ $(document).ready(() => {
   async function exec_for_sun(mode: string) {
     try {
       // フォームの値の読み取り
-      const ll = D.getTargetPseudoLatLng();
+      const ll = await D.getTargetPseudoLatLng();
 
       // プログレス画面の表示
       D.showProgress();
@@ -187,7 +191,7 @@ $(document).ready(() => {
   async function exec_for_moon(mode: string) {
     try {
       // フォームの値の読み取り
-      const ll = D.getTargetPseudoLatLng();
+      const ll = await D.getTargetPseudoLatLng();
 
       // プログレス画面の表示
       D.showProgress();

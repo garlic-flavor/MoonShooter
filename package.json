@@ -26,5 +26,8 @@
     "jquery": "^4.0.0",
     "leaflet": "^1.9.4",
     "typescript": "^6.0.3"
+  },
+  "allowScripts": {
+    "cmark-gfm@0.9.0": true
   }
 }
